@@ -7,7 +7,7 @@ int main(int argc, char *argv[])
     char            pihm_dir[MAXSTRING];
     char            output_dir[MAXSTRING];
     char            project[MAXSTRING];
-    int             rawtime;
+    char            timestr[MAXSTRING];
     double          dflt_val[MAXPARAM];
     int             ind[MAXPARAM];
     param_struct    paramtbl[MAXPARAM];
@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
     ens.ne = atoi(argv[6]);
 
     /* Time */
-    rawtime = atoi(argv[7]);
+    strcpy(timestr, argv[7]);
 
     /*
      * Read default parameter values and assign to ensemble
@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
     /*
      * Write parameter output files and calibration files
      */
-    WriteParamOutput(rawtime, pihm_dir, output_dir, paramtbl, &ens);
+    WriteParamOutput(timestr, pihm_dir, output_dir, paramtbl, &ens);
 
     WriteCalFile(&ens, project, pihm_dir);
 

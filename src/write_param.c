@@ -1,16 +1,11 @@
 #include "enkf.h"
 
-void WriteParamOutput(int rawtime, const char *pihm_dir, const char *output_dir,
-    const param_struct *paramtbl, ens_struct *ens)
+void WriteParamOutput(const char *timestr, const char *pihm_dir,
+    const char *output_dir, const param_struct *paramtbl, ens_struct *ens)
 {
     char            fn[MAXSTRING];
-    time_t          timevar;
-    struct tm      *timeinfo;
     FILE           *fid;
     int             i, j;
-
-    timevar = (time_t)rawtime;
-    timeinfo = gmtime(&timevar);
 
     for (i = 0; i < MAXPARAM; i++)
     {
@@ -21,9 +16,7 @@ void WriteParamOutput(int rawtime, const char *pihm_dir, const char *output_dir,
             fid = fopen(fn, "w");
             CheckFile(fid, fn);
 
-            fprintf(fid, "\"%4.4d-%2.2d-%2.2d %2.2d:%2.2d\"",
-                timeinfo->tm_year+1900, timeinfo->tm_mon + 1, timeinfo->tm_mday,
-                timeinfo->tm_hour, timeinfo->tm_min);
+            fprintf(fid, "\"%s\"", timestr);
             for (j = 0; j < ens->ne; j++)
             {
                 fprintf (fid, "\t%lf", ens->member[j].param[i]);

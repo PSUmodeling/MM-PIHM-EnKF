@@ -1,5 +1,0 @@
-#!/bin/sh
-
-RAWTIME=$(date -d "$CYCLE_START_TIME" +"%s" --utc)
-
-./util/perturb $PIHM_DIR $PROJECT $OUTPUT_DIR $PARAM_TBL $PERTURB_MODE $NUM_MEMBER $RAWTIME

@@ -22,6 +22,7 @@ OBJS = $(SRCS:.c=.o)
 
 all: perturb
 	@chmod 755 ./*.sh
+	@chmod 755 ./util/*.sh
 
 perturb: $(OBJS) $(HEADERS)
 	$(CC) $(CFLAGS) $(INCLUDES) -o $(EXECUTABLE) $(OBJS) $(LIBS)

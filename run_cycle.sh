@@ -21,10 +21,31 @@ fi
 mkdir -p $PIHM_DIR"/output"
 mkdir -p $PIHM_DIR"/output/"$OUTPUT_DIR
 
+# Export variables
+export PIHM_DIR
+export PROJECT
+export OUTPUT_DIR
+export PARAM_TBL
+export PERTURB_MODE
+export NUM_MEMBER
+
+#
 # Create initial parameter values through perturbation
+#
 if [ $PERTURB_MODE -lt 3 ] ; then
     echo
     echo "* Perturb initial parameter values..."
     echo
     . ./util/perturb.sh
 fi
+
+
+C_START_TIME=$CYCLE_START_TIME
+C_END_TIME=$ASSIM_START_TIME
+INIT_MODE=0
+
+# Write MM-PIHM parameter file
+. ./util/write_para.sh "$C_START_TIME" "$C_END_TIME" $INIT_MODE
+
+# Run ensemble simulations
+. ./util/run_ens.sh

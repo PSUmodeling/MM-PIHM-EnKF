@@ -1,10 +1,12 @@
 #include "enkf.h"
 
-void ReadCalib(const char *filename, double *dflt_val)
+void ReadCalib(const char *filename, const paramtbl_struct *paramtbl,
+    double *param)
 {
     char            cmdstr[MAXSTRING];
     char            optstr[MAXSTRING];
     double          val;
+    int             ind;
     FILE           *calib_fp;
     int             lno = 0;
     int             i;
@@ -30,13 +32,16 @@ void ReadCalib(const char *filename, double *dflt_val)
         else
         {
             sscanf(cmdstr, "%*s %lf", &val);
-            for (i = 0; i < MAXPARAM; i++)
+
+            ind = FindParam(optstr, paramtbl);
+            if (ind < 0)
             {
-                if (strcasecmp(optstr, PARAM_NAMES[i]) == 0)
-                {
-                    dflt_val[i] = val;
-                    break;
-                }
+                printf("Error: %s is not listed in parameter table.\n", optstr);
+                exit(EXIT_FAILURE);
+            }
+            else
+            {
+                param[ind] = val;
             }
         }
     }
@@ -44,3 +49,17 @@ void ReadCalib(const char *filename, double *dflt_val)
     fclose(calib_fp);
 }
 
+int FindParam(const char *param_name, const paramtbl_struct *paramtbl)
+{
+    int             i;
+
+    for (i = 0; i < MAXPARAM; i++)
+    {
+        if (strcasecmp(param_name, paramtbl[i].name) == 0)
+        {
+            return i;
+        }
+    }
+
+    return -1;
+}

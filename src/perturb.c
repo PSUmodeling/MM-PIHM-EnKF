@@ -42,10 +42,15 @@ int main(int argc, char *argv[])
     strcpy(timestr, argv[7]);
 
     /*
+     * Read parameter table
+     */
+    ReadParamTbl(paramtbl_fn, paramtbl);
+
+    /*
      * Read default parameter values and assign to ensemble
      */
     sprintf(calib_fn, "%s/input/%s/%s.calib", pihm_dir, project, project);
-    ReadCalib(calib_fn, dflt_val);
+    ReadCalib(calib_fn, paramtbl, dflt_val);
 
 #if defined(_OPENMP)
 # pragma omp parallel for
@@ -59,11 +64,6 @@ int main(int argc, char *argv[])
             ens.member[i].param[j] = dflt_val[j];
         }
     }
-
-    /*
-     * Read parameter table
-     */
-    ReadParamTbl(paramtbl_fn, paramtbl);
 
     /* Count number of parameters that need to be perturbed */
     counter = 0;
@@ -138,7 +138,7 @@ int main(int argc, char *argv[])
      */
     WriteParamOutput(timestr, pihm_dir, output_dir, paramtbl, &ens);
 
-    WriteCalFile(&ens, project, pihm_dir);
+    WriteCalFile(&ens, project, pihm_dir, paramtbl);
 
     for (i = 0; i < counter; i++)
     {

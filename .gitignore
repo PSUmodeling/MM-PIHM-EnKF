@@ -53,6 +53,7 @@ dkms.conf
 
 # Executables
 util/perturb
+util/assim
 
 # Temporary scripts
 /scripts/

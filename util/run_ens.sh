@@ -1,17 +1,26 @@
 #!/bin/sh
 
-# Create scripts directory
-mkdir -p scripts
+if [ $RUN_MODE -eq 0 ] ; then
+    for (( ind=1; ind<=$NUM_MEMBER; ind++ ))
+    do
+        simulation=$( printf '%s.%03d' $PROJECT $ind )
+        export OMP_NUM_THREADS=20
+        cd $PIHM_DIR
+        ./flux-pihm -o $OUTPUT_DIR $simulation
+    done
+else
+    # Create scripts directory
+    mkdir -p scripts
 
-jobid=()
+    jobid=()
 
-for (( ind=1; ind<=$NUM_MEMBER; ind++ ))
-do
-    jobname="ens."$ind
-    simulation=$( printf '%s.%03d' $PROJECT $ind )
+    for (( ind=1; ind<=$NUM_MEMBER; ind++ ))
+    do
+        jobname="ens."$ind
+        simulation=$( printf '%s.%03d' $PROJECT $ind )
 
-    # Create PBS script
-    cat << EOF > "scripts/run_pihm.sh"
+        # Create PBS script
+        cat << EOF > "scripts/run_pihm.sh"
 #!/bin/bash
 #PBS -N $jobname
 #PBS -l nodes=1:ppn=20
@@ -26,22 +35,23 @@ cd $PIHM_DIR
 ./flux-pihm -o $OUTPUT_DIR $simulation
 EOF
 
-    # Submit job
-    log="scripts/job"$ind".log"
-    qsub scripts/run_pihm.sh >& $log
+        # Submit job
+        log="scripts/job"$ind".log"
+        qsub scripts/run_pihm.sh >& $log
 
-    # Get job id
-    jobid[`expr $ind - 1`]=`cat $log |awk  -F. 'NR>1 {print $1}'`
-done
-
-# Wait for all simulations to end
-jobstat=1
-until [[ $jobstat == 0 ]]; do
-    sleep 30s
-    jobstat=0
-    for (( ind=1; ind<=$NUM_MEMBER; ind++ ))
-    do
-        stat=$( qstat |grep ${jobid[`expr $ind - 1`]} |awk '{if($5=="R" || $5=="Q") print 1; else print 0;}' )
-        jobstat=$((jobstat + stat))
+        # Get job id
+        jobid[`expr $ind - 1`]=`cat $log |awk  -F. 'NR>1 {print $1}'`
     done
-done
+
+    # Wait for all simulations to end
+    jobstat=1
+    until [[ $jobstat == 0 ]]; do
+        sleep 30s
+        jobstat=0
+        for (( ind=1; ind<=$NUM_MEMBER; ind++ ))
+        do
+            stat=$( qstat |grep ${jobid[`expr $ind - 1`]} |awk '{if($5=="R" || $5=="Q") print 1; else print 0;}' )
+            jobstat=$((jobstat + stat))
+        done
+    done
+fi

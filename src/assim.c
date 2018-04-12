@@ -47,11 +47,16 @@ int main(int argc, char *argv[])
     /*
      * Read variable and parameter tables
      */
-    ReadVarTbl(vartbl_fn, nelem, nriver, &vartbl);
+    ReadVarTbl(vartbl_fn, nelem, nriver, vartbl);
 
     ReadParamTbl(paramtbl_fn, paramtbl);
 
+    /*
+     * Read variables and parameters
+     */
     ReadVar(pihm_dir, project, output_dir, obs_time, vartbl, &ens);
+
+    ReadParam(pihm_dir, project, paramtbl, &ens);
 
     return EXIT_SUCCESS;
 }

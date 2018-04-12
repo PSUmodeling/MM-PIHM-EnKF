@@ -14,7 +14,6 @@ void ReadVar(const char *pihm_dir, const char *project, const char *output_dir,
     for (i = 0; i < ne; i++)
     {
         int             k;
-        int             ii;
         char            fn[MAXSTRING];
         FILE           *fid;
         double          ctime;

@@ -10,9 +10,12 @@ void            GenRandNum(int, int, double **, double);
 void            NextLine(FILE *, char *, int *);
 double          Randn(void);
 void            ReadCalib(const char *, const paramtbl_struct *, double *);
+void            ReadParam(const char *, const char *, const paramtbl_struct *,
+    ens_struct *);
 void            ReadParamTbl(const char *, paramtbl_struct *);
 void            ReadVar(const char *, const char *, const char *, int,
     const vartbl_struct *, ens_struct *);
+void            ReadVarTbl(const char *, int, int, vartbl_struct *);
 int             Readable(const char *);
 int             roundi(double);
 void            WriteCalFile(const ens_struct *, const char *, const char *,

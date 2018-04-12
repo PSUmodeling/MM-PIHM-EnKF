@@ -1,5 +1,27 @@
 #include "enkf.h"
 
+void ReadParam(const char *pihm_dir, const char *project,
+    const paramtbl_struct *paramtbl, ens_struct *ens)
+{
+    int             i;
+    int             ne;
+
+    ne = ens->ne;
+
+#if defined(_OPENMP)
+# pragma omp parallel for
+#endif
+    for (i = 0; i < ne; i++)
+    {
+        char            fn[MAXSTRING];
+
+        /* Open calib file */
+        sprintf (fn, "%s/input/%s/%s.%3.3d.calib", pihm_dir, project, project,
+            i + 1);
+        ReadCalib(fn, paramtbl, ens->member[i].param);
+    }
+}
+
 void ReadCalib(const char *filename, const paramtbl_struct *paramtbl,
     double *param)
 {
@@ -9,7 +31,6 @@ void ReadCalib(const char *filename, const paramtbl_struct *paramtbl,
     int             ind;
     FILE           *calib_fp;
     int             lno = 0;
-    int             i;
 
     calib_fp = fopen(filename, "r");
     CheckFile(calib_fp, filename);

@@ -1,7 +1,7 @@
 #ifndef ENKF_STRUCT_HEADER
 #define ENKF_STRUCT_HEADER
 
-typedef struct param_struct
+typedef struct paramtbl_struct
 {
     int             perturb;
     int             update;
@@ -12,12 +12,20 @@ typedef struct param_struct
     double          max;
     int             type;
     char            name[MAXSTRING];
-} param_struct;
+} paramtbl_struct;
+
+typedef struct vartbl_struct
+{
+    char            name[MAXSTRING];
+    int             dim;
+    double          min;
+    double          max;
+} vartbl_struct;
 
 typedef struct member_struct
 {
     double          param[MAXPARAM];
-    double          var[MAXVAR];
+    double         *var[MAXVAR];
 } member_struct;
 
 typedef struct ens_struct

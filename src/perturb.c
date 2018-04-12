@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
     char            timestr[MAXSTRING];
     double          dflt_val[MAXPARAM];
     int             ind[MAXPARAM];
-    param_struct    paramtbl[MAXPARAM];
+    paramtbl_struct paramtbl[MAXPARAM];
     int             perturb_mode;
     int             i;
     int             counter;
@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
     /*
      * Copy parameters from command line argument
      */
-     /* PIHM directory */
+    /* PIHM directory */
     strcpy(pihm_dir, argv[1]);
 
     /* Name of project */

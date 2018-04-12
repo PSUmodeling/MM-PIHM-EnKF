@@ -10,6 +10,8 @@
 #define CORRMAX         0.25
 #define SIGMA           0.2     /* 0.2 of parameter range */
 
+#define BADVAL          -999
+
 enum prmt_type {
     KSATH,
     KSATV,

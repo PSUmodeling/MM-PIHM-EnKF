@@ -1,6 +1,6 @@
 #include "enkf.h"
 
-void ReadParamTbl(const char *fname, param_struct *paramtbl)
+void ReadParamTbl(const char *fname, paramtbl_struct *paramtbl)
 {
     char            cmdstr[MAXSTRING];
     FILE           *fid;

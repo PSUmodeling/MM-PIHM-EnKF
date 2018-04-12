@@ -21,13 +21,21 @@ fi
 mkdir -p $PIHM_DIR"/output"
 mkdir -p $PIHM_DIR"/output/"$OUTPUT_DIR
 
+# Read number of elements and river segments
+NELEM=$( head -1 $PIHM_DIR"/input/"$PROJECT"/"$PROJECT".mesh" |awk '{print $2}' )
+NRIVER=$( head -1 $PIHM_DIR"/input/"$PROJECT"/"$PROJECT".riv" |awk '{print $2}' )
+
 # Export variables
 export PIHM_DIR
 export PROJECT
 export OUTPUT_DIR
 export PARAM_TBL
+export VAR_TBL
+export OBS_TBL
 export PERTURB_MODE
 export NUM_MEMBER
+export NELEM
+export NRIVER
 
 #
 # Create initial parameter values through perturbation
@@ -44,8 +52,11 @@ C_START_TIME=$CYCLE_START_TIME
 C_END_TIME=$ASSIM_START_TIME
 INIT_MODE=0
 
-# Write MM-PIHM parameter file
+# Write MM-PIHM control parameter file
 . ./util/write_para.sh "$C_START_TIME" "$C_END_TIME" $INIT_MODE
 
 # Run ensemble simulations
 . ./util/run_ens.sh
+
+# Assimilation
+

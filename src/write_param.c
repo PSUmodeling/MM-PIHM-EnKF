@@ -1,7 +1,7 @@
 #include "enkf.h"
 
 void WriteParamOutput(const char *timestr, const char *pihm_dir,
-    const char *output_dir, const param_struct *paramtbl, ens_struct *ens)
+    const char *output_dir, const paramtbl_struct *paramtbl, ens_struct *ens)
 {
     char            fn[MAXSTRING];
     FILE           *fid;

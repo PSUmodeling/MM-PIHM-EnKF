@@ -4,9 +4,9 @@ CFLAGS = -g -O0 -Wall -Wextra -fopenmp
 SRCDIR = ./src
 INCLUDES = -I$(SRCDIR)/include
 
-PIHM_SRCDIR =~/scratch/MM-PIHM/src
-PIHM_INCLUDES = -I$(PIHMSRCDIR)/include
-PIHM_OBJS_ = read_mesh.o read_river.o
+PIHM_SRCDIR = $$HOME/work/MM-PIHM/src
+PIHM_INCLUDES = -I$(PIHM_SRCDIR)/include
+PIHM_OBJS_ = read_att.o read_func.o read_mesh.o read_river.o read_soil.o soil.o time_func.o
 PIHM_LIB = ./lib/pihmlib.a
 
 LIBS = -lm
@@ -40,15 +40,15 @@ all: perturb assim
 	@chmod 755 ./util/*.sh
 
 perturb: $(PERTURB_OBJS) $(HEADERS)
-	$(CC) $(CFLAGS) $(INCLUDES) -o $(PERTURB) $(PERTURB_OBJS) $(LIBS)
+	$(CC) $(CFLAGS) $(INCLUDES) $(PIHM_INCLUDES) -o $(PERTURB) $(PERTURB_OBJS) $(LIBS)
 
 assim: $(ASSIM_OBJS) $(HEADERS)
 	@mkdir -p lib
 	ar rc $(PIHM_LIB)  $(PIHM_OBJS)
-	$(CC) $(CFLAGS) $(INCLUDES) -o $(ASSIM) $(ASSIM_OBJS) $(PIHM_LIB) $(LIBS)
+	$(CC) $(CFLAGS) $(INCLUDES) $(PIHM_INCLUDES) -o $(ASSIM) $(ASSIM_OBJS) $(PIHM_LIB) $(LIBS)
 
 %.o: %.c $(HEADERS)
-	$(CC) $(CFLAGS) $(INCLUDES) -c $<  -o $@
+	$(CC) $(CFLAGS) $(INCLUDES) $(PIHM_INCLUDES) -c $<  -o $@
 
 clean:
 	@rm -f $(PERTURB_OBJS) $(PERTURB) $(ASSIM_OBJS) $(ASSIM) $(PIHM_LIB)

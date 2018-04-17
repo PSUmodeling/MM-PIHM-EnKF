@@ -1,5 +1,10 @@
 #include "enkf.h"
 
+int                 debug_mode;
+int                 verbose_mode;
+int                 nelem;
+int                 nriver;
+
 int main(int argc, char *argv[])
 {
 
@@ -10,6 +15,7 @@ int main(int argc, char *argv[])
     char            paramtbl_fn[MAXSTRING];
     int             nelem, nriver;
     int             obs_time;
+    pihm_struct     pihm;
     vartbl_struct   vartbl[MAXVAR];
     paramtbl_struct paramtbl[MAXPARAM];
     ens_struct      ens;
@@ -57,6 +63,35 @@ int main(int argc, char *argv[])
     ReadVar(pihm_dir, project, output_dir, obs_time, vartbl, &ens);
 
     ReadParam(pihm_dir, project, paramtbl, &ens);
+
+    /*
+     * Read and initialize some PIHM structures for observation operators
+     */
+    /* Allocate memory for model data structure */
+    pihm = (pihm_struct)malloc(sizeof(*pihm));
+
+    /* Generate PIHM input file names */
+    sprintf(pihm->filename.riv,  "%s/input/%s/%s.riv",
+        pihm_dir, project, project);
+    sprintf(pihm->filename.mesh, "%s/input/%s/%s.mesh",
+        pihm_dir, project, project);
+    sprintf(pihm->filename.att,  "%s/input/%s/%s.att",
+        pihm_dir, project, project);
+    sprintf(pihm->filename.soil, "%s/input/%s/%s.soil",
+        pihm_dir, project, project);
+
+    /* Read river input file */
+    ReadRiver(pihm->filename.riv, &pihm->rivtbl, &pihm->shptbl, &pihm->matltbl,
+        &pihm->forc);
+
+    /* Read mesh structure input file */
+    ReadMesh(pihm->filename.mesh, &pihm->meshtbl);
+
+    /* Read attribute table input file */
+    ReadAtt(pihm->filename.att, &pihm->atttbl);
+
+    /* Read soil input file */
+    ReadSoil(pihm->filename.soil, &pihm->soiltbl);
 
     return EXIT_SUCCESS;
 }

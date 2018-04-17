@@ -1,7 +1,6 @@
 #ifndef ENKF_FUNC_HEADER
 #define ENKF_FUNC_HEADER
 
-/* Perturb */
 void            CheckFile(const FILE *, const char *);
 int             CountLine(FILE *, char *, int , ...);
 void            FindLine(FILE *, const char *, int *, const char *);
@@ -22,5 +21,12 @@ void            WriteCalFile(const ens_struct *, const char *, const char *,
     const paramtbl_struct *paramtbl);
 void            WriteParamOutput(const char *, const char *, const char *,
     const paramtbl_struct *, ens_struct *);
-#endif
 
+/* MM-PIHM functions */
+void            ReadAtt(const char *, atttbl_struct *);
+void            ReadMesh(const char *, meshtbl_struct *);
+void            ReadRiver(const char *, rivtbl_struct *, shptbl_struct *,
+    matltbl_struct *, forc_struct *);
+void            ReadSoil(const char *, soiltbl_struct *);
+
+#endif

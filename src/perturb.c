@@ -87,13 +87,13 @@ int main(int argc, char *argv[])
 
     /* Generate random numbers with means of 0.0 and standard deviations of 1.0.
      *
-     * The initial standard deviation (sigma) of perturbed parameter is SIGMA of
-     * parameter range. The allowed range for generated random number is
+     * The initial standard deviation (sigma) of perturbed parameter is INIT_STD
+     * of parameter range. The allowed range for generated random number is
      * therefore
-     * [(-0.5 / SIGMA - abs(perturb_mode) / sigma,
-     * (0.5 / SIGMA - abs(perturb_mode) / sigma] */
+     * [(-0.5 / INIT_STD - abs(perturb_mode) / sigma,
+     * (0.5 / INIT_STD - abs(perturb_mode) / sigma] */
     GenRandNum(ens.ne, counter, randnum,
-        0.5 / SIGMA - fabs((double)perturb_mode));
+        0.5 / INIT_STD - fabs((double)perturb_mode));
 
     /* Assign random numbers to parameter values */
     printf("\n  Initial parameters\n");
@@ -113,7 +113,7 @@ int main(int argc, char *argv[])
             x[j] = &ens.member[j].param[ind[i]];
         }
 
-        prior_std = SIGMA * (paramtbl[ind[i]].max - paramtbl[ind[i]].min);
+        prior_std = INIT_STD * (paramtbl[ind[i]].max - paramtbl[ind[i]].min);
         prior = (paramtbl[ind[i]].min + paramtbl[ind[i]].max) / 2.0 +
             (double)perturb_mode * prior_std;
 

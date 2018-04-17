@@ -8,7 +8,7 @@
 #define MAXPARAM        100
 #define MAXVAR          100
 #define CORRMAX         0.25
-#define SIGMA           0.2     /* 0.2 of parameter range */
+#define INIT_STD        0.2     /* 0.2 of parameter range */
 
 #define BADVAL          -999
 

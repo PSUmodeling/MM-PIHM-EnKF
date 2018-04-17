@@ -5,8 +5,8 @@ SRCDIR = ./src
 LIBS = -lm
 INCLUDES = -I$(SRCDIR)/include
 
-PERTURB_SRCS_ = perturb.c read_param.c read_func.c read_paramtbl.c write_param.c
-ASSIM_SRCS_ = assim.c read_func.c read_var.c read_vartbl.c read_param.c read_paramtbl.c util.c
+PERTURB_SRCS_ = perturb.c read_param.c custom_io.c read_paramtbl.c write_param.c
+ASSIM_SRCS_ = assim.c custom_io.c read_var.c read_vartbl.c read_param.c read_paramtbl.c util.c
 
 HEADERS_ =\
 	include/enkf.h\

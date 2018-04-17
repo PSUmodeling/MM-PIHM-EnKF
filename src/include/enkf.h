@@ -14,6 +14,8 @@
 
 #define VERSION    "0.1.0-alpha"
 
+#include "custom_io.h"
+
 #include "enkf_const.h"
 #include "enkf_struct.h"
 #include "enkf_func.h"

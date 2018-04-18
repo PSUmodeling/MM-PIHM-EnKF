@@ -16,6 +16,8 @@
 
 #include "custom_io.h"
 
+#define _NOAH_
+
 #include "pihm_const.h"
 #include "pihm_input_struct.h"
 #include "elem_struct.h"

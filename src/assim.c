@@ -15,6 +15,7 @@ int main(int argc, char *argv[])
     char            paramtbl_fn[MAXSTRING];
     int             nelem, nriver;
     int             obs_time;
+    int             i;
     pihm_struct     pihm;
     vartbl_struct   vartbl[MAXVAR];
     paramtbl_struct paramtbl[MAXPARAM];
@@ -79,6 +80,8 @@ int main(int argc, char *argv[])
         pihm_dir, project, project);
     sprintf(pihm->filename.soil, "%s/input/%s/%s.soil",
         pihm_dir, project, project);
+    sprintf(pihm->filename.lsm,  "%s/input/%s/%s.lsm",
+        pihm_dir, project, project);
 
     /* Read river input file */
     ReadRiver(pihm->filename.riv, &pihm->rivtbl, &pihm->shptbl, &pihm->matltbl,
@@ -92,6 +95,26 @@ int main(int argc, char *argv[])
 
     /* Read soil input file */
     ReadSoil(pihm->filename.soil, &pihm->soiltbl);
+
+    /* Read LSM input file */
+    ReadLsm(pihm->filename.lsm, &pihm->siteinfo, &pihm->ctrl, &pihm->noahtbl);
+
+    pihm->elem = (elem_struct *)malloc(nelem * sizeof(elem_struct));
+    pihm->river = (river_struct *)malloc(nriver * sizeof(river_struct));
+
+    for (i = 0; i < nelem; i++)
+    {
+        pihm->elem[i].attrib.soil_type = pihm->atttbl.soil[i];
+    }
+
+    InitMesh(pihm->elem, &pihm->meshtbl);
+
+    InitTopo(pihm->elem, &pihm->meshtbl);
+
+    InitSoil(pihm->elem, &pihm->soiltbl, &pihm->cal);
+
+    InitRiver(pihm->river, pihm->elem, &pihm->rivtbl, &pihm->shptbl,
+        &pihm->matltbl, &pihm->meshtbl, &pihm->cal);
 
     return EXIT_SUCCESS;
 }

@@ -6,9 +6,18 @@ int             CountLine(FILE *, char *, int , ...);
 void            FindLine(FILE *, const char *, int *, const char *);
 int             FindParam(const char *, const paramtbl_struct *);
 void            GenRandNum(int, int, double **, double);
+void            InitMesh(elem_struct *, const meshtbl_struct *);
+void            InitRiver(river_struct *, elem_struct *, const rivtbl_struct *,
+    const shptbl_struct *, const matltbl_struct *, const meshtbl_struct *,
+    const calib_struct *);
+void            InitSoil(elem_struct *, const soiltbl_struct *,
+    const calib_struct *);
+void            InitTopo(elem_struct *, const meshtbl_struct *);
 void            NextLine(FILE *, char *, int *);
 double          Randn(void);
 void            ReadCalib(const char *, const paramtbl_struct *, double *);
+void            ReadLsm(const char *, siteinfo_struct *, ctrl_struct *,
+    noahtbl_struct *);
 void            ReadParam(const char *, const char *, const paramtbl_struct *,
     ens_struct *);
 void            ReadParamTbl(const char *, paramtbl_struct *);

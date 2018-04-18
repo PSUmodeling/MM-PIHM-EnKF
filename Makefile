@@ -6,7 +6,19 @@ INCLUDES = -I$(SRCDIR)/include
 
 PIHM_SRCDIR = $$HOME/work/MM-PIHM/src
 PIHM_INCLUDES = -I$(PIHM_SRCDIR)/include
-PIHM_OBJS_ = read_att.o read_func.o read_mesh.o read_river.o read_soil.o soil.o time_func.o
+PIHM_OBJS_ = \
+	init_mesh.o\
+	init_river.o\
+	init_soil.o\
+	init_topo.o\
+	read_att.o\
+	read_func.o\
+	noah/lsm_read.o\
+	read_mesh.o\
+	read_river.o\
+	read_soil.o\
+	soil.o\
+	time_func.o
 PIHM_LIB = ./lib/pihmlib.a
 
 LIBS = -lm

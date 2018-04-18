@@ -1,6 +1,7 @@
 #ifndef ENKF_FUNC_HEADER
 #define ENKF_FUNC_HEADER
 
+void            BuildPIHM(const char *, const char *, pihm_struct);
 void            CheckFile(const FILE *, const char *);
 int             CountLine(FILE *, char *, int , ...);
 void            FindLine(FILE *, const char *, int *, const char *);

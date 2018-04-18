@@ -13,11 +13,13 @@ int main(int argc, char *argv[])
     char            project[MAXSTRING];
     char            vartbl_fn[MAXSTRING];
     char            paramtbl_fn[MAXSTRING];
+    char            obstbl_fn[MAXSTRING];
     int             nelem, nriver;
     int             obs_time;
     pihm_struct     pihm;
     vartbl_struct   vartbl[MAXVAR];
     paramtbl_struct paramtbl[MAXPARAM];
+    obstbl_struct   obstbl[MAXOBS];
     ens_struct      ens;
 
     /*
@@ -38,24 +40,29 @@ int main(int argc, char *argv[])
     /* Name of variable table file */
     strcpy(vartbl_fn, argv[5]);
 
+    /* Name of observation table file */
+    strcpy(obstbl_fn, argv[6]);
+
     /* Number of ensemble member */
-    ens.ne = atoi(argv[6]);
+    ens.ne = atoi(argv[7]);
 
     /* Time */
-    obs_time = atoi(argv[7]);
+    obs_time = atoi(argv[8]);
 
     /* Number of elements*/
-    nelem = atoi(argv[8]);
+    nelem = atoi(argv[9]);
 
     /* Nubmer of river segments */
-    nriver = atoi(argv[9]);
+    nriver = atoi(argv[10]);
 
     /*
-     * Read variable and parameter tables
+     * Read variable, parameter, and observation tables
      */
     ReadVarTbl(vartbl_fn, nelem, nriver, vartbl);
 
     ReadParamTbl(paramtbl_fn, paramtbl);
+
+    ReadObsTbl(obstbl_fn, obstbl);
 
     /*
      * Read variables and parameters
@@ -71,6 +78,11 @@ int main(int argc, char *argv[])
     pihm = (pihm_struct)malloc(sizeof(*pihm));
 
     BuildPIHM(pihm_dir, project, pihm);
+
+    /*
+     * Create observation operators
+     */
+    ObsOper(obstbl, vartbl, pihm);
 
     return EXIT_SUCCESS;
 }

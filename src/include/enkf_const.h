@@ -3,10 +3,10 @@
 
 #define PI              3.14159265
 
-#define MAXSTRING       1024
 #define MAXNE           50
 #define MAXPARAM        100
 #define MAXVAR          100
+#define MAXOBS          20
 #define CORRMAX         0.25
 #define INIT_STD        0.2     /* 0.2 of parameter range */
 

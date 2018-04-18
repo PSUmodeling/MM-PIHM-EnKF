@@ -16,7 +16,7 @@ void ReadParamTbl(const char *fname, paramtbl_struct *paramtbl)
     }
 
     /* Open parameter table */
-    fid = fopen (fname, "r");
+    fid = fopen(fname, "r");
     CheckFile(fid, fname);
 
     /* Header line */

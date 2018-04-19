@@ -101,115 +101,78 @@ void Assim(const char *pihm_dir, const char *output_dir,
     const obstbl_struct *obstbl, int t, int first_cycle, ens_struct *ens)
 {
     double         *xf;
-    int             i, j, k;
+    int             i, j;
     int             ne;
     char            obs_out_fn[MAXSTRING];
-    char            obs_in_fn[MAXSTRING];
     FILE           *obs_fp;
     double          obs;
     double          obs_error;
+    ens_struct      prior;
     pihm_t_struct   pihm_time;
 
     pihm_time = PIHMTime(t);
-//
-//    enkf_struct     ens0;
-//
+
     ne = ens->ne;
-//
-//    ens0 = (enkf_struct)malloc (sizeof *ens0);
-//    ens0->ne = ne;
-//    ens0->member = (ens_mbr_struct *)malloc (ne * sizeof(ens_mbr_struct));
-//
-//    for (i = 0; i < ne; i++)
-//    {
-//        for (j = 0; j < MAXVAR; j++)
-//        {
-//            if (ens->var[j].dim > 0)
-//            {
-//                ens0->member[i].var[j] =
-//                    (double *)malloc(ens->var[j].dim * sizeof(double));
-//            }
-//        }
-//    }
-//
+
+    SavePrior(ens, vartbl, &prior);
+
     xf = (double *)malloc(sizeof(double) * (ne + 1));
 
     printf("\nStarting EnKF ... \n");
-//
-//    /* Copy prior from ens to En0 */
-//
-//    for (i = 0; i < ne; i++)
-//    {
-//        for (j = 0; j < MAXPARAM; j++)
-//        {
-//            ens0->member[i].param[j] = ens->member[i].param[j];
-//        }
-//        for (j = 0; j < MAXVAR; j++)
-//        {
-//            if (ens->var[j].dim > 0)
-//            {
-//                for(k = 0; k < ens->var[j].dim; k++)
-//                {
-//                    ens0->member[i].var[j][k] = ens->member[i].var[j][k];
-//                }
-//            }
-//        }
-//    }
-//
-//
-//    if (ens->nobs > 0)
-//    {
-    sprintf(obs_out_fn, "%s/output/%s/obs.dat", pihm_dir, output_dir);
-    if (first_cycle)
-    {
-        obs_fp = fopen(obs_out_fn, "w");
-    }
-    else
-    {
-        obs_fp = fopen(obs_out_fn, "a");
-    }
-    fprintf (obs_fp, "\"%s\"", pihm_time.str);
 
-    for (i = 0; i < MAXOBS; i++)
+    if (obstbl[0].name[0] != '\0')
     {
-        if ('\0' == obstbl[i].name[0])
+        sprintf(obs_out_fn, "%s/output/%s/obs.dat", pihm_dir, output_dir);
+        if (first_cycle)
         {
-            break;
+            obs_fp = fopen(obs_out_fn, "w");
+        }
+        else
+        {
+            obs_fp = fopen(obs_out_fn, "a");
+        }
+        fprintf (obs_fp, "\"%s\"", pihm_time.str);
+
+        for (i = 0; i < MAXOBS; i++)
+        {
+            if ('\0' == obstbl[i].name[0])
+            {
+                break;
+            }
+
+            printf("\n*****%s******\n", obstbl[i].name);
+
+            /* Read observations */
+            ReadObs(t, obstbl[i].fname, &obs, &obs_error);
+
+            printf("observed value = %lf (error: %lf)\n", obs, obs_error);
+
+            /* Read ensemble forecasts */
+            Forecast(ens, vartbl, &obstbl[i], xf);
+
+            /* Prepare forecast vectors */
+            printf("prediction = ");
+            for (j = 0; j < ne; j++)
+            {
+                printf("%f\t", xf[j]);
+            }
+            printf("mean: %f\n", xf[ne]);
+
+            /* Write observations to files */
+
+            fprintf (obs_fp, "\t%lf", obs);
+
+//            UpdAnlys (ens, obs, obs_error, xf);
         }
 
-        printf("\n*****%s******\n", obstbl[i].name);
-
-        /* Read observations */
-        ReadObs(t, obstbl[i].fname, &obs, &obs_error);
-
-        printf("observed value = %lf (error: %lf)\n", obs, obs_error);
-
-        /* Read ensemble forecasts */
-        Forecast(ens, vartbl, &obstbl[i], xf);
-
-        /* Prepare forecast vectors */
-        printf("prediction = ");
-        for (j = 0; j < ne; j++)
-        {
-            printf("%f\t", xf[j]);
-        }
-        printf("mean: %f\n", xf[ne]);
-
-        /* Write observations to files */
-
-        fprintf (obs_fp, "\t%lf", obs);
-
-//      UpdAnlys (ens, obs, obs_error, xf);
+            fprintf(obs_fp, "\n");
+            fflush (obs_fp);
+            fclose (obs_fp);
+//
+//            /* Covariance inflation */
+//            CovInflt(ens, ens0);
     }
 
-        fprintf(obs_fp, "\n");
-        fflush (obs_fp);
-        fclose (obs_fp);
-//
-//        /* Covariance inflation */
-//        CovInflt(ens, ens0);
-//    }
-//
 //    WriteEnKFOut (project, ens, outputdir, obs_time);
 //
 //    for (i = 0; i < ne; i++)
@@ -223,8 +186,40 @@ void Assim(const char *pihm_dir, const char *output_dir,
 //        }
 //    }
 //
-//    free (ens0->member);
-//    free (ens0);
-//
-//    free(xf);
+    free(xf);
+}
+
+void SavePrior(const ens_struct *ens, const vartbl_struct *vartbl,
+    ens_struct *prior)
+{
+    int             i;
+
+    prior->ne = ens->ne;
+
+#if defined(_OPENMP)
+# pragma omp parallel for
+#endif
+    for (i = 0; i < ens->ne; i++)
+    {
+        int             j, k;
+
+        for (k = 0; k < MAXVAR; k++)
+        {
+            if (vartbl[k].dim > 0)
+            {
+                prior->member[i].var[k] =
+                    (double *)malloc(vartbl[k].dim * sizeof(double));
+
+                for (j = 0; j < vartbl[k].dim; j++)
+                {
+                    prior->member[i].var[k][j] = ens->member[i].var[k][j];
+                }
+            }
+        }
+
+        for (k = 0; k < MAXPARAM; k++)
+        {
+            prior->member[i].param[k] = ens->member[i].param[k];
+        }
+    }
 }

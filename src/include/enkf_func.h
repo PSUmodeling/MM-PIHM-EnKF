@@ -30,6 +30,8 @@ void            ReadVar(const char *, const char *, const char *, int,
     const vartbl_struct *, ens_struct *);
 void            ReadVarTbl(const char *, int, int, vartbl_struct *);
 int             roundi(double);
+void            SavePrior(const ens_struct *, const vartbl_struct *,
+    ens_struct *);
 void            WeightByArea(const elem_struct *, obstbl_struct *);
 void            WriteCalFile(const ens_struct *, const char *, const char *,
     const paramtbl_struct *paramtbl);

@@ -9,8 +9,8 @@ cat << EOF > $PIHM_DIR"/input/"$PROJECT"/"$PROJECT".para"
 SIMULATION_MODE     $INIT_MODE
 INIT_MODE           1
 ASCII_OUTPUT        0
-WATBAL_OUTPUT       1
-WRITE_IC            1
+WATBAL_OUTPUT       0
+WRITE_IC            0
 UNSAT_MODE          2
 SURF_MODE           2
 RIV_MODE            2
@@ -18,7 +18,7 @@ START               $START_TIME
 END                 $END_TIME
 MAX_SPINUP_YEAR     100
 MODEL_STEPSIZE      60
-LSM_STEP            60
+LSM_STEP            900
 
 ABSTOL              1E-4
 RELTOL              1E-3

@@ -51,14 +51,14 @@ fi
 
 C_START_TIME=$CYCLE_START_TIME
 C_END_TIME=$ASSIM_START_TIME
-INIT_MODE=0
 
 if [ "$C_END_TIME" = "$ASSIM_START_TIME" ] ; then
     FIRST_CYCLE=1
+    INIT_MODE=0
 else
     FIRST_CYCLE=0
+    INIT_MODE=1
 fi
-echo $FIRST_CYCLE
 
 # Write MM-PIHM control parameter file
 . ./util/write_para.sh "$C_START_TIME" "$C_END_TIME" $INIT_MODE

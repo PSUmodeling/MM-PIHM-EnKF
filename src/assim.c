@@ -160,14 +160,14 @@ void Assim(const char *pihm_dir, const char *output_dir,
 
             /* Write observations to files */
 
-            fprintf (obs_fp, "\t%lf", obs);
+            fprintf(obs_fp, "\t%lf", obs);
 
-//            UpdAnlys (ens, obs, obs_error, xf);
+            Anlys(paramtbl, vartbl, obs, obs_error, xf, ens);
         }
 
-            fprintf(obs_fp, "\n");
-            fflush (obs_fp);
-            fclose (obs_fp);
+        fprintf(obs_fp, "\n");
+        fflush (obs_fp);
+        fclose (obs_fp);
 //
 //            /* Covariance inflation */
 //            CovInflt(ens, ens0);

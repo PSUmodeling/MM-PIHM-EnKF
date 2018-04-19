@@ -23,7 +23,6 @@ void Forecast(const ens_struct *ens, const vartbl_struct *vartbl,
     {
         int             j, k;
         int             ind;
-        double          xj;
 
         for (j = 0; j < obs->nlyr; j++)
         {

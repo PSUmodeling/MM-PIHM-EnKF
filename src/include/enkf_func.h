@@ -1,6 +1,8 @@
 #ifndef ENKF_FUNC_HEADER
 #define ENKF_FUNC_HEADER
 
+void            Anlys(const paramtbl_struct *, const vartbl_struct *, double,
+    double, const double *, ens_struct *);
 void            Assim(const char *, const char *, const paramtbl_struct *,
     const vartbl_struct *, const obstbl_struct *, int, int, ens_struct *);
 void            BuildPIHM(const char *, const char *, pihm_struct);
@@ -9,6 +11,7 @@ void            COSMOSOper(obstbl_struct *, const vartbl_struct *,
 void            DischOper(obstbl_struct *, const vartbl_struct *,
     const pihm_struct);
 double          Dist(double, double, double, double);
+void            EnKF(double *, double, double, const double *, int);
 int             FindParam(const char *, const paramtbl_struct *);
 int             FindVar(const char *, const vartbl_struct *);
 void            Forecast(const ens_struct *, const vartbl_struct *vartbl,

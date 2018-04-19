@@ -28,6 +28,7 @@ ASSIM_SRCS_ =\
 	assim.c\
 	build_pihm.c\
 	custom_io.c\
+	enkf.c\
 	forecast.c\
 	obs_oper.c\
 	read_obs.c\

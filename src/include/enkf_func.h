@@ -1,8 +1,8 @@
 #ifndef ENKF_FUNC_HEADER
 #define ENKF_FUNC_HEADER
 
-void            Assim(const paramtbl_struct *, const vartbl_struct *,
-    const obstbl_struct *, ens_struct *);
+void            Assim(const char *, const char *, const paramtbl_struct *,
+    const vartbl_struct *, const obstbl_struct *, int, int, ens_struct *);
 void            BuildPIHM(const char *, const char *, pihm_struct);
 void            COSMOSOper(obstbl_struct *, const vartbl_struct *,
     const pihm_struct);
@@ -21,6 +21,7 @@ void            ObsOper(obstbl_struct *, const vartbl_struct *,
 void            ObsOperAlloc(obstbl_struct *);
 double          Randn(void);
 void            ReadCalib(const char *, const paramtbl_struct *, double *);
+void            ReadObs(int, const char *, double *, double *);
 void            ReadObsTbl(const char *, obstbl_struct *);
 void            ReadParam(const char *, const char *, const paramtbl_struct *,
     ens_struct *);
@@ -43,6 +44,7 @@ void            InitRiver(river_struct *, elem_struct *, const rivtbl_struct *,
 void            InitSoil(elem_struct *, const soiltbl_struct *,
     const calib_struct *);
 void            InitTopo(elem_struct *, const meshtbl_struct *);
+pihm_t_struct   PIHMTime(int);
 void            ReadAtt(const char *, atttbl_struct *);
 void            ReadLsm(const char *, siteinfo_struct *, ctrl_struct *,
     noahtbl_struct *);
@@ -50,5 +52,6 @@ void            ReadMesh(const char *, meshtbl_struct *);
 void            ReadRiver(const char *, rivtbl_struct *, shptbl_struct *,
     matltbl_struct *, forc_struct *);
 void            ReadSoil(const char *, soiltbl_struct *);
+int             StrTime(const char *);
 
 #endif

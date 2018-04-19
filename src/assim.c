@@ -16,6 +16,7 @@ int main(int argc, char *argv[])
     char            obstbl_fn[MAXSTRING];
     int             nelem, nriver;
     int             obs_time;
+    int             first_cycle;
     pihm_struct     pihm;
     vartbl_struct   vartbl[MAXVAR];
     paramtbl_struct paramtbl[MAXPARAM];
@@ -55,6 +56,9 @@ int main(int argc, char *argv[])
     /* Nubmer of river segments */
     nriver = atoi(argv[10]);
 
+    /* First assimilation cycle flag */
+    first_cycle = atoi(argv[11]);
+
     /*
      * Read variable, parameter, and observation tables
      */
@@ -74,7 +78,6 @@ int main(int argc, char *argv[])
     /*
      * Read and initialize some PIHM structures for observation operators
      */
-    /* Allocate memory for model data structure */
     pihm = (pihm_struct)malloc(sizeof(*pihm));
 
     BuildPIHM(pihm_dir, project, pihm);
@@ -87,27 +90,27 @@ int main(int argc, char *argv[])
     /*
      * Data assimilation
      */
-    Assim(paramtbl, vartbl, obstbl, &ens);
+    Assim(pihm_dir, output_dir, paramtbl, vartbl, obstbl, obs_time, first_cycle,
+        &ens);
 
     return EXIT_SUCCESS;
 }
 
-void Assim(const paramtbl_struct *paramtbl, const vartbl_struct *vartbl,
-    const obstbl_struct *obstbl, ens_struct *ens)
+void Assim(const char *pihm_dir, const char *output_dir,
+    const paramtbl_struct *paramtbl, const vartbl_struct *vartbl,
+    const obstbl_struct *obstbl, int t, int first_cycle, ens_struct *ens)
 {
     double         *xf;
     int             i, j, k;
     int             ne;
-//
-//    char            obsfn[MAXSTRING];
-//    char            obsin_fn[MAXSTRING];
-//    FILE           *obsfile;
-//
-//    double          obs;
-//    double          obs_error;
-//
-//    struct tm      *timestamp;
-//    time_t          rawtime;
+    char            obs_out_fn[MAXSTRING];
+    char            obs_in_fn[MAXSTRING];
+    FILE           *obs_fp;
+    double          obs;
+    double          obs_error;
+    pihm_t_struct   pihm_time;
+
+    pihm_time = PIHMTime(t);
 //
 //    enkf_struct     ens0;
 //
@@ -156,52 +159,52 @@ void Assim(const paramtbl_struct *paramtbl, const vartbl_struct *vartbl,
 //
 //    if (ens->nobs > 0)
 //    {
-//        sprintf (obsfn, "%sobs.dat", outputdir);
-//        obsfile = fopen (obsfn, "a");
-//        fprintf (obsfile, "\"%4.4d-%2.2d-%2.2d %2.2d:%2.2d\"",
-//            timestamp->tm_year + 1900, timestamp->tm_mon + 1,
-//            timestamp->tm_mday, timestamp->tm_hour, timestamp->tm_min);
-//
-//
-        for (i = 0; i < MAXOBS; i++)
+    sprintf(obs_out_fn, "%s/output/%s/obs.dat", pihm_dir, output_dir);
+    if (first_cycle)
+    {
+        obs_fp = fopen(obs_out_fn, "w");
+    }
+    else
+    {
+        obs_fp = fopen(obs_out_fn, "a");
+    }
+    fprintf (obs_fp, "\"%s\"", pihm_time.str);
+
+    for (i = 0; i < MAXOBS; i++)
+    {
+        if ('\0' == obstbl[i].name[0])
         {
-            if ('\0' == obstbl[i].name[0])
-            {
-                break;
-            }
-
-
-            printf("\n*****%s******\n", obstbl[i].name);
-
-//            /* Read observations */
-//            sprintf (obsin_fn, "input/%s/%s", project, ens->obs[i].fn);
-//            ReadObs (obs_time, obsin_fn, &obs, &obs_error);
-//
-//            printf("observation = %lf\n", obs);
-//            printf("error = %lf\n", obs_error);
-//
-            /* Read ensemble forecasts */
-            Forecast(ens, vartbl, &obstbl[i], xf);
-
-            /* Prepare forecast vectors */
-
-            printf("prediction = ");
-            for (j = 0; j < ne; j++)
-            {
-                printf("%f\t", xf[j]);
-            }
-            printf("mean: %f\n", xf[ne]);
-//
-//            /* Write observations to files */
-//
-//            fprintf (obsfile, "\t%lf", obs);
-//
-//            UpdAnlys (ens, obs, obs_error, xf);
+            break;
         }
-//
-//        fprintf(obsfile, "\n");
-//        fflush (obsfile);
-//        fclose (obsfile);
+
+        printf("\n*****%s******\n", obstbl[i].name);
+
+        /* Read observations */
+        ReadObs(t, obstbl[i].fname, &obs, &obs_error);
+
+        printf("observed value = %lf (error: %lf)\n", obs, obs_error);
+
+        /* Read ensemble forecasts */
+        Forecast(ens, vartbl, &obstbl[i], xf);
+
+        /* Prepare forecast vectors */
+        printf("prediction = ");
+        for (j = 0; j < ne; j++)
+        {
+            printf("%f\t", xf[j]);
+        }
+        printf("mean: %f\n", xf[ne]);
+
+        /* Write observations to files */
+
+        fprintf (obs_fp, "\t%lf", obs);
+
+//      UpdAnlys (ens, obs, obs_error, xf);
+    }
+
+        fprintf(obs_fp, "\n");
+        fflush (obs_fp);
+        fclose (obs_fp);
 //
 //        /* Covariance inflation */
 //        CovInflt(ens, ens0);

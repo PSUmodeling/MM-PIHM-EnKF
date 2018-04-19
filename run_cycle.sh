@@ -37,6 +37,7 @@ export NUM_MEMBER
 export NELEM
 export NRIVER
 
+WORK_DIR=$PWD
 #
 # Create initial parameter values through perturbation
 #
@@ -52,6 +53,13 @@ C_START_TIME=$CYCLE_START_TIME
 C_END_TIME=$ASSIM_START_TIME
 INIT_MODE=0
 
+if [ "$C_END_TIME" = "$ASSIM_START_TIME" ] ; then
+    FIRST_CYCLE=1
+else
+    FIRST_CYCLE=0
+fi
+echo $FIRST_CYCLE
+
 # Write MM-PIHM control parameter file
 . ./util/write_para.sh "$C_START_TIME" "$C_END_TIME" $INIT_MODE
 
@@ -59,4 +67,7 @@ INIT_MODE=0
 . ./util/run_ens.sh
 
 # Assimilation
+OBS_TIME=$(date -d "$C_END_TIME" +"%s" --utc)
 
+cd $WORK_DIR
+./util/assim $PIHM_DIR $PROJECT $OUTPUT_DIR $PARAM_TBL $VAR_TBL $OBS_TBL $NUM_MEMBER $OBS_TIME $NELEM $NRIVER $FIRST_CYCLE

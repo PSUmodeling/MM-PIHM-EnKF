@@ -24,7 +24,19 @@ PIHM_LIB = ./lib/pihmlib.a
 LIBS = -lm
 
 PERTURB_SRCS_ = perturb.c read_param.c custom_io.c read_paramtbl.c write_param.c
-ASSIM_SRCS_ = assim.c build_pihm.c custom_io.c forecast.c obs_oper.c read_obstbl.c read_var.c read_vartbl.c read_param.c read_paramtbl.c util.c
+ASSIM_SRCS_ =\
+	assim.c\
+	build_pihm.c\
+	custom_io.c\
+	forecast.c\
+	obs_oper.c\
+	read_obs.c\
+	read_obstbl.c\
+	read_var.c\
+	read_vartbl.c\
+	read_param.c\
+	read_paramtbl.c\
+	util.c
 
 HEADERS_ =\
 	include/enkf.h\

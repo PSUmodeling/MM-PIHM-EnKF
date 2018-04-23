@@ -6,7 +6,7 @@ if [ $RUN_MODE -eq 0 ] ; then
         simulation=$( printf '%s.%03d' $PROJECT $ind )
         export OMP_NUM_THREADS=20
         cd $PIHM_DIR
-        ./flux-pihm -o $OUTPUT_DIR $simulation
+        ./flux-pihm -b -o $OUTPUT_DIR $simulation
     done
 else
     # Create scripts directory
@@ -32,7 +32,7 @@ else
 
 export OMP_NUM_THREADS=20
 cd $PIHM_DIR
-./flux-pihm -o $OUTPUT_DIR $simulation
+./flux-pihm -b -o $OUTPUT_DIR $simulation
 EOF
 
         # Submit job

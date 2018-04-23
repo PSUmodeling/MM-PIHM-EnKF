@@ -27,6 +27,7 @@ PERTURB_SRCS_ = perturb.c read_param.c custom_io.c read_paramtbl.c write_param.c
 ASSIM_SRCS_ =\
 	assim.c\
 	build_pihm.c\
+	cov_inflt.c\
 	custom_io.c\
 	enkf.c\
 	forecast.c\

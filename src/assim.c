@@ -21,6 +21,7 @@ int main(int argc, char *argv[])
     vartbl_struct   vartbl[MAXVAR];
     paramtbl_struct paramtbl[MAXPARAM];
     obstbl_struct   obstbl[MAXOBS];
+    double          inflt_weight;
     ens_struct      ens;
 
     /*
@@ -59,6 +60,9 @@ int main(int argc, char *argv[])
     /* First assimilation cycle flag */
     first_cycle = atoi(argv[11]);
 
+    /* Covariance relaxation weight */
+    inflt_weight = atof(argv[12]);
+
     /*
      * Read variable, parameter, and observation tables
      */
@@ -90,15 +94,16 @@ int main(int argc, char *argv[])
     /*
      * Data assimilation
      */
-    Assim(pihm_dir, output_dir, paramtbl, vartbl, obstbl, obs_time, first_cycle,
-        &ens);
+    Assim(pihm_dir, output_dir, paramtbl, vartbl, obstbl, inflt_weight,
+        obs_time, first_cycle, &ens);
 
     return EXIT_SUCCESS;
 }
 
 void Assim(const char *pihm_dir, const char *output_dir,
     const paramtbl_struct *paramtbl, const vartbl_struct *vartbl,
-    const obstbl_struct *obstbl, int t, int first_cycle, ens_struct *ens)
+    const obstbl_struct *obstbl, double inflt_weight, int t, int first_cycle,
+    ens_struct *ens)
 {
     double         *xf;
     int             i, j;
@@ -168,9 +173,9 @@ void Assim(const char *pihm_dir, const char *output_dir,
         fprintf(obs_fp, "\n");
         fflush (obs_fp);
         fclose (obs_fp);
-//
-//            /* Covariance inflation */
-//            CovInflt(ens, ens0);
+
+        /* Covariance inflation */
+        CovInflt(paramtbl, vartbl, inflt_weight, &prior, ens);
     }
 
 //    WriteEnKFOut (project, ens, outputdir, obs_time);

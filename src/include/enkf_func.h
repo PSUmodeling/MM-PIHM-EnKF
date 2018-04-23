@@ -4,10 +4,15 @@
 void            Anlys(const paramtbl_struct *, const vartbl_struct *, double,
     double, const double *, ens_struct *);
 void            Assim(const char *, const char *, const paramtbl_struct *,
-    const vartbl_struct *, const obstbl_struct *, int, int, ens_struct *);
+    const vartbl_struct *, const obstbl_struct *, double, int, int,
+    ens_struct *);
 void            BuildPIHM(const char *, const char *, pihm_struct);
 void            COSMOSOper(obstbl_struct *, const vartbl_struct *,
     const pihm_struct);
+void            CondCovInflt(double, int, double *);
+void            CovInflt(const paramtbl_struct *, const vartbl_struct *, double,
+    const ens_struct *, ens_struct *);
+void            CovRelax(double, int, const double *, double *);
 void            DischOper(obstbl_struct *, const vartbl_struct *,
     const pihm_struct);
 double          Dist(double, double, double, double);
@@ -22,6 +27,7 @@ void            LandSfcTmpOper(obstbl_struct *, const vartbl_struct *,
 void            ObsOper(obstbl_struct *, const vartbl_struct *,
     const pihm_struct);
 void            ObsOperAlloc(obstbl_struct *);
+void            PlsblRngCstr(double, double, int, double *);
 double          Randn(void);
 void            ReadCalib(const char *, const paramtbl_struct *, double *);
 void            ReadObs(int, const char *, double *, double *);

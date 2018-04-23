@@ -42,10 +42,14 @@ int             roundi(double);
 void            SavePrior(const ens_struct *, const vartbl_struct *,
     ens_struct *);
 void            WeightByArea(const elem_struct *, obstbl_struct *);
-void            WriteCalFile(const ens_struct *, const char *, const char *,
-    const paramtbl_struct *paramtbl);
-void            WriteParamOutput(const char *, const char *, const char *,
-    const paramtbl_struct *, ens_struct *);
+void            WriteCalFile(const char *, const char *,
+    const paramtbl_struct *, const ens_struct *);
+void            WriteInit(const char *, const char *, const vartbl_struct *,
+    const ens_struct *);
+void            WriteParamOutput(const char *, const char *,
+    const paramtbl_struct *, int, int, ens_struct *);
+void            WriteVarOutput(const char *, const char *, const char *,
+    const vartbl_struct *, int, const ens_struct *);
 
 /* MM-PIHM functions */
 void            InitMesh(elem_struct *, const meshtbl_struct *);

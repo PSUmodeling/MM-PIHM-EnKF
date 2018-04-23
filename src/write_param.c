@@ -1,22 +1,33 @@
 #include "enkf.h"
 
-void WriteParamOutput(const char *timestr, const char *pihm_dir,
-    const char *output_dir, const paramtbl_struct *paramtbl, ens_struct *ens)
+void WriteParamOutput(const char *pihm_dir, const char *output_dir,
+    const paramtbl_struct *paramtbl, int t, int flag, ens_struct *ens)
 {
     char            fn[MAXSTRING];
     FILE           *fp;
     int             i, j;
+    pihm_t_struct   pihm_time;
+
+    pihm_time = PIHMTime(t);
 
     for (i = 0; i < MAXPARAM; i++)
     {
-        if (1 == paramtbl[i].perturb)
+        if ((1 == paramtbl[i].perturb && PERTURB == flag) ||
+            (1 == paramtbl[i].update && ASSIM == flag))
         {
             sprintf(fn, "%s/output/%s/%s.txt",
                 pihm_dir, output_dir, paramtbl[i].name);
-            fp = fopen(fn, "w");
+            if (PERTURB == flag)
+            {
+                fp = fopen(fn, "w");
+            }
+            else
+            {
+                fp = fopen(fn, "a");
+            }
             CheckFile(fp, fn);
 
-            fprintf(fp, "\"%s\"", timestr);
+            fprintf(fp, "\"%s\"", pihm_time.str);
             for (j = 0; j < ens->ne; j++)
             {
                 fprintf (fp, "\t%lf", ens->member[j].param[i]);
@@ -28,8 +39,8 @@ void WriteParamOutput(const char *timestr, const char *pihm_dir,
     }
 }
 
-void WriteCalFile(const ens_struct *ens, const char *project,
-    const char *pihm_dir, const paramtbl_struct *paramtbl)
+void WriteCalFile(const char *pihm_dir, const char *project,
+    const paramtbl_struct *paramtbl, const ens_struct *ens)
 {
     int             i;
     const int       NUM_HYDROL_PARAM = 25;

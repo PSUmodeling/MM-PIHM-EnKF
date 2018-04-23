@@ -38,6 +38,9 @@ ASSIM_SRCS_ =\
 	read_vartbl.c\
 	read_param.c\
 	read_paramtbl.c\
+	write_ic.c\
+	write_param.c\
+	write_var.c\
 	util.c
 
 HEADERS_ =\
@@ -61,16 +64,18 @@ PIHM_OBJS = $(patsubst %,$(PIHM_SRCDIR)/%,$(PIHM_OBJS_))
 
 .PHONY: all perturb assim clean
 
-all: perturb assim
+all: pihmlib perturb assim
 	@chmod 755 ./*.sh
 	@chmod 755 ./util/*.sh
 
+pihmlib:
+	@mkdir -p lib
+	ar rc $(PIHM_LIB) $(PIHM_OBJS)
+
 perturb: $(PERTURB_OBJS) $(HEADERS)
-	$(CC) $(CFLAGS) $(INCLUDES) $(PIHM_INCLUDES) -o $(PERTURB) $(PERTURB_OBJS) $(LIBS)
+	$(CC) $(CFLAGS) $(INCLUDES) $(PIHM_INCLUDES) -o $(PERTURB) $(PERTURB_OBJS) $(PIHM_LIB) $(LIBS)
 
 assim: $(ASSIM_OBJS) $(HEADERS)
-	@mkdir -p lib
-	ar rc $(PIHM_LIB)  $(PIHM_OBJS)
 	$(CC) $(CFLAGS) $(INCLUDES) $(PIHM_INCLUDES) -o $(ASSIM) $(ASSIM_OBJS) $(PIHM_LIB) $(LIBS)
 
 %.o: %.c $(HEADERS)

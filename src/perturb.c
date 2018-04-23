@@ -1,5 +1,8 @@
 #include "enkf.h"
 
+int                 debug_mode;
+int                 verbose_mode;
+
 int main(int argc, char *argv[])
 {
     char            paramtbl_fn[MAXSTRING];
@@ -7,8 +10,8 @@ int main(int argc, char *argv[])
     char            pihm_dir[MAXSTRING];
     char            output_dir[MAXSTRING];
     char            project[MAXSTRING];
-    char            timestr[MAXSTRING];
     double          dflt_val[MAXPARAM];
+    int             t;
     int             ind[MAXPARAM];
     paramtbl_struct paramtbl[MAXPARAM];
     int             perturb_mode;
@@ -39,7 +42,7 @@ int main(int argc, char *argv[])
     ens.ne = atoi(argv[6]);
 
     /* Time */
-    strcpy(timestr, argv[7]);
+    t = atoi(argv[7]);
 
     /*
      * Read parameter table
@@ -136,9 +139,9 @@ int main(int argc, char *argv[])
     /*
      * Write parameter output files and calibration files
      */
-    WriteParamOutput(timestr, pihm_dir, output_dir, paramtbl, &ens);
+    WriteParamOutput(pihm_dir, output_dir, paramtbl, t, PERTURB, &ens);
 
-    WriteCalFile(&ens, project, pihm_dir, paramtbl);
+    WriteCalFile(pihm_dir, project, paramtbl, &ens);
 
     for (i = 0; i < counter; i++)
     {

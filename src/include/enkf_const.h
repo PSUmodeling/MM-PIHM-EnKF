@@ -13,6 +13,8 @@
                                  * expressed as fraction of initial standard
                                  * deviation */
 #define EPSILON         1.0E-6
+#define PERTURB         0
+#define ASSIM           1
 #define BADVAL          -999
 
 //enum prmt_type {

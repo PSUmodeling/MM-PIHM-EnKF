@@ -97,6 +97,17 @@ int main(int argc, char *argv[])
     Assim(pihm_dir, output_dir, paramtbl, vartbl, obstbl, inflt_weight,
         obs_time, first_cycle, &ens);
 
+    /*
+     * Write output files
+     */
+    WriteParamOutput(pihm_dir, output_dir, paramtbl, obs_time, ASSIM, &ens);
+
+    WriteVarOutput(pihm_dir, output_dir, project, vartbl, obs_time, &ens);
+
+    WriteInit(pihm_dir, project, vartbl, &ens);
+
+    WriteCalFile(pihm_dir, project, paramtbl, &ens);
+
     return EXIT_SUCCESS;
 }
 
@@ -178,19 +189,6 @@ void Assim(const char *pihm_dir, const char *output_dir,
         CovInflt(paramtbl, vartbl, inflt_weight, &prior, ens);
     }
 
-//    WriteEnKFOut (project, ens, outputdir, obs_time);
-//
-//    for (i = 0; i < ne; i++)
-//    {
-//        for (j = 0; j < MAXVAR; j++)
-//        {
-//            if (ens->var[j].dim > 0)
-//            {
-//                free (ens0->member[i].var[j]);
-//            }
-//        }
-//    }
-//
     free(xf);
 }
 

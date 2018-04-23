@@ -20,8 +20,6 @@ void CovInflt(const paramtbl_struct *paramtbl, const vartbl_struct *vartbl,
 
         if (1 == paramtbl[k].update)
         {
-            printf("%s\n", paramtbl[k].name);
-
             xa[ne] = 0.0;
             xf[ne] = 0.0;
             for (i = 0; i < ne; i++)
@@ -58,29 +56,30 @@ void CovInflt(const paramtbl_struct *paramtbl, const vartbl_struct *vartbl,
                     if (1 == paramtbl[k].type)
                     {
                         xa[i] = pow(10.0, xa[i]);
-                        ens->member[i].param[k] = xa[i];
                     }
-                    printf("%lf\t", xa[i]);
+
+                    ens->member[i].param[k] = xa[i];
                 }
 
                 if (1 == paramtbl[k].type)
                 {
                     xa[ne] = pow(10.0, xa[ne]);
                 }
-                printf("mean: %lf\n", xa[ne]);
+                printf("%s\tmean: %lf\n", paramtbl[k].name, xa[ne]);
             }
             else
             {
-                printf("EnKF analysis %lf is out of range.", xa[i]);
-                printf(" Parameter is not updated.\n");
+                printf("%s\tEnKF update %lf is out of range and is rejected.\n",
+                    paramtbl[k].name, xa[i]);
                 for (i = 0; i < ne; i++)
                 {
                     xa[i] = xf[i];
                     if (1 == paramtbl[k].type)
                     {
                         xa[i] = pow(10.0, xf[i]);
-                        ens->member[i].param[k] = xa[i];
                     }
+
+                    ens->member[i].param[k] = xa[i];
                 }
             }
         }

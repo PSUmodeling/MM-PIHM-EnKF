@@ -45,7 +45,7 @@ if [ $PERTURB_MODE -lt 3 ] ; then
     echo
     echo "* Perturb initial parameter values..."
     echo
-    ./util/perturb $PIHM_DIR $PROJECT $OUTPUT_DIR $PARAM_TBL $PERTURB_MODE $NUM_MEMBER "$CYCLE_START_TIME"
+    ./util/perturb $PIHM_DIR $PROJECT $OUTPUT_DIR $PARAM_TBL $PERTURB_MODE $NUM_MEMBER $(date -d "$CYCLE_START_TIME" +"%s" --utc)
 fi
 
 

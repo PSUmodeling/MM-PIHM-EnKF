@@ -1,6 +1,6 @@
 #include "enkf.h"
 
-void ReadParam(const char *pihm_dir, const char *project,
+void ReadEnsParam(const char *pihm_dir, const char *project,
     const paramtbl_struct *paramtbl, ens_struct *ens)
 {
     int             i;
@@ -18,11 +18,11 @@ void ReadParam(const char *pihm_dir, const char *project,
         /* Open calib file */
         sprintf (fn, "%s/input/%s/%s.%3.3d.calib", pihm_dir, project, project,
             i + 1);
-        ReadCalib(fn, paramtbl, ens->member[i].param);
+        ReadParam(fn, paramtbl, ens->member[i].param);
     }
 }
 
-void ReadCalib(const char *filename, const paramtbl_struct *paramtbl,
+void ReadParam(const char *filename, const paramtbl_struct *paramtbl,
     double *param)
 {
     char            cmdstr[MAXSTRING];

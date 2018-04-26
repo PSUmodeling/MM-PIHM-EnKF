@@ -13,7 +13,11 @@ PIHM_OBJS_ = \
 	init_topo.o\
 	read_att.o\
 	read_func.o\
+	noah/lsm_func.o\
+	noah/lsm_init.o\
 	noah/lsm_read.o\
+	noah/noah.o\
+	read_calib.o\
 	read_mesh.o\
 	read_river.o\
 	read_soil.o\
@@ -38,6 +42,7 @@ ASSIM_SRCS_ =\
 	read_vartbl.c\
 	read_param.c\
 	read_paramtbl.c\
+	water_bal.c\
 	write_ic.c\
 	write_param.c\
 	write_var.c\

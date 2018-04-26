@@ -1,7 +1,8 @@
 #include "enkf.h"
 
-void ReadVar(const char *pihm_dir, const char *project, const char *output_dir,
-    int obs_time, const vartbl_struct *vartbl, ens_struct *ens)
+void ReadEnsVar(const char *pihm_dir, const char *project,
+    const char *output_dir, int obs_time, const vartbl_struct *vartbl,
+    ens_struct *ens)
 {
     int             i;
     int             ne;

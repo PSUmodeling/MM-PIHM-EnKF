@@ -2,12 +2,18 @@
 
 START_TIME=$1
 END_TIME=$2
-INIT_MODE=$3
+first_cycle=$3
 
-# Create PBS script
+if [ $first_cycle == 1 ]; then
+    INIT_MODE=0
+else
+    INIT_MODE=1
+fi
+
+# Create parameter file
 cat << EOF > $PIHM_DIR"/input/"$PROJECT"/"$PROJECT".para"
-SIMULATION_MODE     $INIT_MODE
-INIT_MODE           1
+SIMULATION_MODE     0
+INIT_MODE           $INIT_MODE
 ASCII_OUTPUT        0
 WATBAL_OUTPUT       0
 WRITE_IC            0

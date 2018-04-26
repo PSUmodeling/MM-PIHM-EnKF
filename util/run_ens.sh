@@ -1,12 +1,20 @@
 #!/bin/sh
 
+first_cycle=$1
+
+if [ $first_cycle == 1 ]; then
+    param="-b -o $OUTPUT_DIR"
+else
+    param="-ab -o $OUTPUT_DIR"
+fi
+
 if [ $RUN_MODE -eq 0 ] ; then
     for (( ind=1; ind<=$NUM_MEMBER; ind++ ))
     do
         simulation=$( printf '%s.%03d' $PROJECT $ind )
         export OMP_NUM_THREADS=20
         cd $PIHM_DIR
-        ./flux-pihm -b -o $OUTPUT_DIR $simulation
+        ./flux-pihm $param $simulation
     done
 else
     # Create scripts directory
@@ -32,7 +40,7 @@ else
 
 export OMP_NUM_THREADS=20
 cd $PIHM_DIR
-./flux-pihm -b -o $OUTPUT_DIR $simulation
+./flux-pihm $param $simulation
 EOF
 
         # Submit job

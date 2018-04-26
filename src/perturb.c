@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
      * Read default parameter values and assign to ensemble
      */
     sprintf(calib_fn, "%s/input/%s/%s.calib", pihm_dir, project, project);
-    ReadCalib(calib_fn, paramtbl, dflt_val);
+    ReadParam(calib_fn, paramtbl, dflt_val);
 
 #if defined(_OPENMP)
 # pragma omp parallel for

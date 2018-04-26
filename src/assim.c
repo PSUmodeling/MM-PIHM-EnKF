@@ -4,6 +4,7 @@ int                 debug_mode;
 int                 verbose_mode;
 int                 nelem;
 int                 nriver;
+int                 tecplot;
 
 int main(int argc, char *argv[])
 {
@@ -130,6 +131,19 @@ int main(int argc, char *argv[])
 
     WriteCalFile(pihm_dir, project, paramtbl, &ens);
 
+    FreeObsOper(obstbl);
+    FreeEnsMbr(vartbl, &ens);
+
+    FreeRivtbl(&pihm->rivtbl);
+    FreeShptbl(&pihm->shptbl);
+    FreeMatltbl(&pihm->matltbl);
+    FreeMeshtbl(&pihm->meshtbl);
+    FreeAtttbl(&pihm->atttbl);
+    FreeSoiltbl(&pihm->soiltbl);
+    free(pihm->elem);
+    free(pihm->river);
+    free(pihm);
+
     return EXIT_SUCCESS;
 }
 
@@ -138,7 +152,7 @@ void Assim(const char *pihm_dir, const char *output_dir,
     const obstbl_struct *obstbl, double inflt_weight, int t, int first_cycle,
     ens_struct *ens)
 {
-    double         *xf;
+    double          xf[MAXNE + 1];
     int             i, j;
     int             ne;
     char            obs_out_fn[MAXSTRING];
@@ -153,8 +167,6 @@ void Assim(const char *pihm_dir, const char *output_dir,
     ne = ens->ne;
 
     SavePrior(ens, vartbl, &prior);
-
-    xf = (double *)malloc(sizeof(double) * (ne + 1));
 
     printf("\nStarting EnKF ... \n");
 
@@ -211,7 +223,7 @@ void Assim(const char *pihm_dir, const char *output_dir,
         CovInflt(paramtbl, vartbl, inflt_weight, &prior, ens);
     }
 
-    free(xf);
+    FreeEnsMbr(vartbl, &prior);
 }
 
 void SavePrior(const ens_struct *ens, const vartbl_struct *vartbl,
@@ -245,6 +257,24 @@ void SavePrior(const ens_struct *ens, const vartbl_struct *vartbl,
         for (k = 0; k < MAXPARAM; k++)
         {
             prior->member[i].param[k] = ens->member[i].param[k];
+        }
+    }
+}
+
+void FreeEnsMbr(const vartbl_struct *vartbl, ens_struct *ens)
+{
+    int             i;
+
+    for (i = 0; i < ens->ne; i++)
+    {
+        int             k;
+
+        for (k = 0; k < MAXVAR; k++)
+        {
+            if (vartbl[k].dim > 0)
+            {
+                free(ens->member[i].var[k]);
+            }
         }
     }
 }

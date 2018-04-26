@@ -177,3 +177,27 @@ void WeightByArea(const elem_struct *elem, obstbl_struct *obs)
         obs->weight[i] /= total_area;
     }
 }
+
+void FreeObsOper(obstbl_struct *obstbl)
+{
+    int             i;
+
+    for (i = 0; i < MAXOBS; i++)
+    {
+        int             k;
+
+        if (obstbl[i].name[0] != '\0')
+        {
+            free(obstbl[i].var_ind);
+            free(obstbl[i].weight);
+            for (k = 0; k < obstbl[i].dim; k++)
+            {
+                free(obstbl->k[k]);
+                free(obstbl->b[k]);
+            }
+            free(obstbl[i].k);
+            free(obstbl[i].b);
+        }
+    }
+}
+

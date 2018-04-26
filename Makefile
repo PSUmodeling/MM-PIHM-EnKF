@@ -1,5 +1,17 @@
 CC = gcc
-CFLAGS = -g -O0 -Wall -Wextra -fopenmp
+CFLAGS = -g -O2
+
+ifeq ($(WARNING), on)
+  CFLAGS += -Wall -Wextra
+endif
+
+ifeq ($(DEBUG), on)
+  CFLAGS += -O0
+endif
+
+ifneq ($(OMP), off)
+  CFLAGS += -fopenmp
+endif
 
 SRCDIR = ./src
 INCLUDES = -I$(SRCDIR)/include
@@ -7,6 +19,7 @@ INCLUDES = -I$(SRCDIR)/include
 PIHM_SRCDIR = $$HOME/work/MM-PIHM/src
 PIHM_INCLUDES = -I$(PIHM_SRCDIR)/include
 PIHM_OBJS_ = \
+	free_mem.o\
 	init_mesh.o\
 	init_river.o\
 	init_soil.o\

@@ -19,8 +19,10 @@ double          Dist(double, double, double, double);
 void            EnKF(double *, double, double, const double *, int);
 int             FindParam(const char *, const paramtbl_struct *);
 int             FindVar(const char *, const vartbl_struct *);
-void            Forecast(const ens_struct *, const vartbl_struct *vartbl,
+void            Forecast(const ens_struct *, const vartbl_struct *,
     const obstbl_struct *, double *);
+void            FreeEnsMbr(const vartbl_struct *, ens_struct *);
+void            FreeObsOper(obstbl_struct *);
 void            GenRandNum(int, int, double **, double);
 void            LandSfcTmpOper(obstbl_struct *, const vartbl_struct *,
     const pihm_struct);
@@ -57,6 +59,12 @@ void            WriteVarOutput(const char *, const char *, const char *,
 void            AdjSmProf(const soil_struct *, const pstate_struct *,
     const double *, double, wflux_struct *, wstate_struct *);
 int             FindWaterTable(const double *, int, double, double *);
+void            FreeAtttbl(atttbl_struct *);
+void            FreeMatltbl(matltbl_struct *);
+void            FreeMeshTbl(meshtbl_struct *);
+void            FreeRivtbl(rivtbl_struct *);
+void            FreeShptbl(shptbl_struct *);
+void            FreeSoiltbl(soiltbl_struct *);
 void            InitLsm(elem_struct *, const ctrl_struct *,
     const noahtbl_struct *, const calib_struct *);
 void            InitMesh(elem_struct *, const meshtbl_struct *);

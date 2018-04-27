@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
 
     if (argc != 3)
     {
-        printf("Error: command line parameters are not correctly set.");
+        printf("Error: command line parameters are not correctly set.\n");
         exit(EXIT_FAILURE);
     }
 

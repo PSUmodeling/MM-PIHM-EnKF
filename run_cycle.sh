@@ -60,6 +60,9 @@ if [ $PERTURB_MODE -lt 3 ] ; then
     echo "* Perturb initial parameter values..."
     echo
     ./util/perturb $(date -d "$CYCLE_START_TIME" +"%s" --utc)
+    if [ $? -ne 0 ] ; then
+        exit 1
+    fi
 fi
 
 ###################################################################
@@ -93,6 +96,9 @@ do
 
     cd $WORK_DIR
     ./util/assim $OBS_TIME $FIRST_CYCLE
+    if [ $? -ne 0 ] ; then
+        exit 1
+    fi
 
     # Advance time by assimilation interval
     C_START_TIME=$(date -d "$C_START_TIME $ASSIM_INTVL hour" +"%Y-%m-%d %H:%M" --utc)

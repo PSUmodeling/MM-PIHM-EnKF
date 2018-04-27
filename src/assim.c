@@ -25,44 +25,50 @@ int main(int argc, char *argv[])
     double          inflt_weight;
     ens_struct      ens;
 
+    if (argc != 3)
+    {
+        printf("Error: command line parameters are not correctly set.");
+        exit(EXIT_FAILURE);
+    }
+
     /*
-     * Copy parameters from command line argument
+     * Copy parameters from command line argument and environment variables
      */
      /* PIHM directory */
-    strcpy(pihm_dir, argv[1]);
+    strcpy(pihm_dir, getenv("PIHM_DIR"));
 
     /* Name of project */
-    strcpy(project, argv[2]);
+    strcpy(project, getenv("PROJECT"));
 
     /* Output directory */
-    strcpy(output_dir, argv[3]);
+    strcpy(output_dir, getenv("OUTPUT_DIR"));
 
     /* Name of parameter table file */
-    strcpy(paramtbl_fn, argv[4]);
+    strcpy(paramtbl_fn, getenv("PARAM_TBL"));
 
     /* Name of variable table file */
-    strcpy(vartbl_fn, argv[5]);
+    strcpy(vartbl_fn, getenv("VAR_TBL"));
 
     /* Name of observation table file */
-    strcpy(obstbl_fn, argv[6]);
+    strcpy(obstbl_fn, getenv("OBS_TBL"));
 
     /* Number of ensemble member */
-    ens.ne = atoi(argv[7]);
-
-    /* Time */
-    obs_time = atoi(argv[8]);
+    ens.ne = atoi(getenv("NUM_MEMBER"));
 
     /* Number of elements*/
-    nelem = atoi(argv[9]);
+    nelem = atoi(getenv("NELEM"));
 
     /* Nubmer of river segments */
-    nriver = atoi(argv[10]);
-
-    /* First assimilation cycle flag */
-    first_cycle = atoi(argv[11]);
+    nriver = atoi(getenv("NRIVER"));
 
     /* Covariance relaxation weight */
-    inflt_weight = atof(argv[12]);
+    inflt_weight = atof(getenv("INFLT_WEIGHT"));
+
+    /* Time */
+    obs_time = atoi(argv[1]);
+
+    /* First assimilation cycle flag */
+    first_cycle = atoi(argv[2]);
 
     /*
      * Read variable, parameter, and observation tables
@@ -86,21 +92,21 @@ int main(int argc, char *argv[])
     pihm = (pihm_struct)malloc(sizeof(*pihm));
 
     pihm->cal = (calib_struct){
-    .ksath = 1.0, .ksatv = 1.0, .kinfv = 1.0, .kmach = 1.0, .kmacv = 1.0,
-    .dinf = 1.0, .rzd = 1.0, .dmac = 1.0,
-    .porosity = 1.0, .alpha = 1.0, .beta = 1.0,
-    .areafv = 1.0, .areafh = 1.0,
-    .vegfrac = 1.0, .albedo = 1.0, .rough = 1.0,
-    .ec = 1.0, .ett = 1.0, .edir = 1.0,
-    .rivrough = 1.0, .rivksath = 1.0, .rivksatv = 1.0,
-    .rivbedthick = 1.0, .rivdepth = 1.0, .rivshpcoeff = 1.0,
-    .prcp = 1.0, .sfctmp = 0.0,
-    .smcref = 1.0, .smcwlt = 1.0,
-    .rsmin = 1.0,
-    .drip = 1.0, .cmcmax = 1.0,
-    .czil = 1.0,
-    .fxexp = 1.0, .cfactr = 1.0,
-    .rgl = 1.0, .hs = 1.0};
+        .ksath = 1.0, .ksatv = 1.0, .kinfv = 1.0, .kmach = 1.0, .kmacv = 1.0,
+        .dinf = 1.0, .rzd = 1.0, .dmac = 1.0,
+        .porosity = 1.0, .alpha = 1.0, .beta = 1.0,
+        .areafv = 1.0, .areafh = 1.0,
+        .vegfrac = 1.0, .albedo = 1.0, .rough = 1.0,
+        .ec = 1.0, .ett = 1.0, .edir = 1.0,
+        .rivrough = 1.0, .rivksath = 1.0, .rivksatv = 1.0,
+        .rivbedthick = 1.0, .rivdepth = 1.0, .rivshpcoeff = 1.0,
+        .prcp = 1.0, .sfctmp = 0.0,
+        .smcref = 1.0, .smcwlt = 1.0,
+        .rsmin = 1.0,
+        .drip = 1.0, .cmcmax = 1.0,
+        .czil = 1.0,
+        .fxexp = 1.0, .cfactr = 1.0,
+        .rgl = 1.0, .hs = 1.0};
 
     BuildPIHM(pihm_dir, project, pihm);
 

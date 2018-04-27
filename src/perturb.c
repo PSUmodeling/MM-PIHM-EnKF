@@ -20,29 +20,35 @@ int main(int argc, char *argv[])
     double        **randnum;
     ens_struct      ens;
 
+    if (argc != 2)
+    {
+        printf("Error: command line parameters are not correctly set.");
+        exit(EXIT_FAILURE);
+    }
+
     /*
-     * Copy parameters from command line argument
+     * Copy parameters from command line argument and environment variables
      */
     /* PIHM directory */
-    strcpy(pihm_dir, argv[1]);
+    strcpy(pihm_dir, getenv("PIHM_DIR"));
 
     /* Name of project */
-    strcpy(project, argv[2]);
+    strcpy(project, getenv("PROJECT"));
 
     /* Output directory */
-    strcpy(output_dir, argv[3]);
+    strcpy(output_dir, getenv("OUTPUT_DIR"));
 
     /* Name of parameter table file */
-    strcpy(paramtbl_fn, argv[4]);
+    strcpy(paramtbl_fn, getenv("PARAM_TBL"));
 
     /* Perturbation mode */
-    perturb_mode = atoi(argv[5]);
+    perturb_mode = atoi(getenv("PERTURB_MODE"));
 
     /* Number of ensemble member */
-    ens.ne = atoi(argv[6]);
+    ens.ne = atoi(getenv("NUM_MEMBER"));
 
     /* Time */
-    t = atoi(argv[7]);
+    t = atoi(argv[1]);
 
     /*
      * Read parameter table

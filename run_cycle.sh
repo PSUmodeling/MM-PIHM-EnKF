@@ -46,6 +46,7 @@ export VAR_TBL
 export OBS_TBL
 export PERTURB_MODE
 export NUM_MEMBER
+export INFLT_WEIGHT
 export NELEM
 export NRIVER
 
@@ -58,7 +59,7 @@ if [ $PERTURB_MODE -lt 3 ] ; then
     echo
     echo "* Perturb initial parameter values..."
     echo
-    ./util/perturb $PIHM_DIR $PROJECT $OUTPUT_DIR $PARAM_TBL $PERTURB_MODE $NUM_MEMBER $(date -d "$CYCLE_START_TIME" +"%s" --utc)
+    ./util/perturb $(date -d "$CYCLE_START_TIME" +"%s" --utc)
 fi
 
 ###################################################################
@@ -91,7 +92,7 @@ do
     OBS_TIME=$(date -d "$C_END_TIME" +"%s" --utc)
 
     cd $WORK_DIR
-#    ./util/assim $PIHM_DIR $PROJECT $OUTPUT_DIR $PARAM_TBL $VAR_TBL $OBS_TBL $NUM_MEMBER $OBS_TIME $NELEM $NRIVER $FIRST_CYCLE $INFLT_WEIGHT
+    ./util/assim $OBS_TIME $FIRST_CYCLE
 
     # Advance time by assimilation interval
     C_START_TIME=$(date -d "$C_START_TIME $ASSIM_INTVL hour" +"%Y-%m-%d %H:%M" --utc)

@@ -192,8 +192,8 @@ void FreeObsOper(obstbl_struct *obstbl)
             free(obstbl[i].weight);
             for (k = 0; k < obstbl[i].dim; k++)
             {
-                free(obstbl->k[k]);
-                free(obstbl->b[k]);
+                free(obstbl[i].k[k]);
+                free(obstbl[i].b[k]);
             }
             free(obstbl[i].k);
             free(obstbl[i].b);

@@ -3,9 +3,9 @@
 first_cycle=$1
 
 if [ $first_cycle == 1 ]; then
-    param="-b -o $OUTPUT_DIR"
+    param="-s -o $OUTPUT_DIR"
 else
-    param="-ab -o $OUTPUT_DIR"
+    param="-as -o $OUTPUT_DIR"
 fi
 
 if [ $RUN_MODE -eq 0 ] ; then
@@ -14,6 +14,7 @@ if [ $RUN_MODE -eq 0 ] ; then
         simulation=$( printf '%s.%03d' $PROJECT $ind )
         export OMP_NUM_THREADS=20
         cd $PIHM_DIR
+        echo "    Running ensemble member $ind"
         ./flux-pihm $param $simulation
     done
 else

@@ -1,5 +1,16 @@
+# Makefile for MM-PIHM EnKF v0.1.0-alpha
+
+# Please specify your MM-PIHM directory
+PIHM_DIR = $$HOME/work/MM-PIHM
+
 CC = gcc
 CFLAGS = -g -O2
+
+# Required MM-PIHM version
+RQD_PIHM_VERS = 0.9.0-alpha
+
+# Current MM-PIHM EnKF version
+VERS = 0.1.0-alpha
 
 ifeq ($(WARNING), on)
   CFLAGS += -Wall -Wextra
@@ -16,7 +27,7 @@ endif
 SRCDIR = ./src
 INCLUDES = -I$(SRCDIR)/include
 
-PIHM_SRCDIR = $$HOME/work/MM-PIHM/src
+PIHM_SRCDIR = $(PIHM_DIR)/src
 PIHM_INCLUDES = -I$(PIHM_SRCDIR)/include
 PIHM_OBJS_ = \
 	free_mem.o\
@@ -40,7 +51,20 @@ PIHM_LIB = ./lib/pihmlib.a
 
 LIBS = -lm
 
-PERTURB_SRCS_ = perturb.c read_param.c custom_io.c read_paramtbl.c write_param.c
+ENKF_IO_SRCS_ =\
+	custom_io.c\
+	read_obs.c\
+	read_obstbl.c\
+	read_param.c\
+	read_paramtbl.c\
+	read_var.c\
+	read_vartbl.c\
+	write_ic.c\
+	write_param.c\
+	write_var.c
+ENKF_IO_LIB = ./lib/enkfiolib.a
+
+PERTURB_SRCS_ = perturb.c
 ASSIM_SRCS_ =\
 	assim.c\
 	build_pihm.c\
@@ -49,19 +73,11 @@ ASSIM_SRCS_ =\
 	enkf.c\
 	forecast.c\
 	obs_oper.c\
-	read_obs.c\
-	read_obstbl.c\
-	read_var.c\
-	read_vartbl.c\
-	read_param.c\
-	read_paramtbl.c\
-	water_bal.c\
-	write_ic.c\
-	write_param.c\
-	write_var.c\
-	util.c
+	util.c\
+	water_bal.c
 
 HEADERS_ =\
+	include/custom_io.h\
 	include/enkf.h\
 	include/enkf_const.h\
 	include/enkf_struct.h\
@@ -72,6 +88,9 @@ ASSIM = util/assim
 
 HEADERS = $(patsubst %,$(SRCDIR)/%,$(HEADERS_))
 
+ENKF_IO_SRCS = $(patsubst %,$(SRCDIR)/%,$(ENKF_IO_SRCS_))
+ENKF_IO_OBJS = $(ENKF_IO_SRCS:.c=.o)
+
 PERTURB_SRCS = $(patsubst %,$(SRCDIR)/%,$(PERTURB_SRCS_))
 PERTURB_OBJS = $(PERTURB_SRCS:.c=.o)
 
@@ -80,24 +99,30 @@ ASSIM_OBJS = $(ASSIM_SRCS:.c=.o)
 
 PIHM_OBJS = $(patsubst %,$(PIHM_SRCDIR)/%,$(PIHM_OBJS_))
 
-.PHONY: all perturb assim clean
+.PHONY: all check_version perturb assim clean
 
-all: pihmlib perturb assim
+all: check_version pihmlib enkflib perturb assim
 	@chmod 755 ./*.sh
 	@chmod 755 ./util/*.sh
+
+check_version:
+	@util/check_version.sh $(PIHM_DIR) $(RQD_PIHM_VERS) $(VERS)
 
 pihmlib:
 	@mkdir -p lib
 	ar rc $(PIHM_LIB) $(PIHM_OBJS)
 
+enkflib: $(ENKF_IO_OBJS) $(HEADERS)
+	ar rc $(ENKF_IO_LIB) $(ENKF_IO_OBJS)
+
 perturb: $(PERTURB_OBJS) $(HEADERS)
-	$(CC) $(CFLAGS) $(INCLUDES) $(PIHM_INCLUDES) -o $(PERTURB) $(PERTURB_OBJS) $(PIHM_LIB) $(LIBS)
+	$(CC) $(CFLAGS) $(INCLUDES) $(PIHM_INCLUDES) -o $(PERTURB) $(PERTURB_OBJS) $(ENKF_IO_LIB) $(PIHM_LIB) $(LIBS)
 
 assim: $(ASSIM_OBJS) $(HEADERS)
-	$(CC) $(CFLAGS) $(INCLUDES) $(PIHM_INCLUDES) -o $(ASSIM) $(ASSIM_OBJS) $(PIHM_LIB) $(LIBS)
+	$(CC) $(CFLAGS) $(INCLUDES) $(PIHM_INCLUDES) -o $(ASSIM) $(ASSIM_OBJS) $(ENKF_IO_LIB) $(PIHM_LIB) $(LIBS)
 
 %.o: %.c $(HEADERS)
-	$(CC) $(CFLAGS) $(INCLUDES) $(PIHM_INCLUDES) -c $<  -o $@
+	$(CC) $(CFLAGS) $(INCLUDES) $(PIHM_INCLUDES) -c $< -o $@
 
 clean:
-	@rm -f $(PERTURB_OBJS) $(PERTURB) $(ASSIM_OBJS) $(ASSIM) $(PIHM_LIB)
+	@rm -f $(ENKF_IO_OBJS) $(PERTURB_OBJS) $(PERTURB) $(ASSIM_OBJS) $(ASSIM) $(PIHM_LIB) $(ENKF_IO_LIB)

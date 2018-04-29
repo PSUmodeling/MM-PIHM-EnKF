@@ -15,7 +15,6 @@ int main(int argc, char *argv[])
     char            vartbl_fn[MAXSTRING];
     char            paramtbl_fn[MAXSTRING];
     char            obstbl_fn[MAXSTRING];
-    int             nelem, nriver;
     int             obs_time;
     int             first_cycle;
     pihm_struct     pihm;
@@ -55,12 +54,6 @@ int main(int argc, char *argv[])
     /* Number of ensemble member */
     ens.ne = atoi(getenv("NUM_MEMBER"));
 
-    /* Number of elements*/
-    nelem = atoi(getenv("NELEM"));
-
-    /* Nubmer of river segments */
-    nriver = atoi(getenv("NRIVER"));
-
     /* Covariance relaxation weight */
     inflt_weight = atof(getenv("INFLT_WEIGHT"));
 
@@ -69,6 +62,13 @@ int main(int argc, char *argv[])
 
     /* First assimilation cycle flag */
     first_cycle = atoi(argv[2]);
+
+    /*
+     * Read and initialize some PIHM structures for observation operators
+     */
+    pihm = (pihm_struct)malloc(sizeof(*pihm));
+
+    BuildPIHM(pihm_dir, project, pihm);
 
     /*
      * Read variable, parameter, and observation tables
@@ -85,13 +85,6 @@ int main(int argc, char *argv[])
     ReadEnsVar(pihm_dir, project, output_dir, obs_time, vartbl, &ens);
 
     ReadEnsParam(pihm_dir, project, paramtbl, &ens);
-
-    /*
-     * Read and initialize some PIHM structures for observation operators
-     */
-    pihm = (pihm_struct)malloc(sizeof(*pihm));
-
-    BuildPIHM(pihm_dir, project, pihm);
 
     /*
      * Create observation operators
@@ -118,7 +111,7 @@ int main(int argc, char *argv[])
 
     WriteInit(pihm_dir, project, vartbl, &ens);
 
-    WriteCalFile(pihm_dir, project, paramtbl, &ens);
+    //WriteCalFile(pihm_dir, project, paramtbl, &ens);
 
     FreeObsOper(obstbl);
     FreeEnsMbr(vartbl, &ens);

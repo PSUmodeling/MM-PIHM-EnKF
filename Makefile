@@ -7,7 +7,7 @@ VERS = 0.1.0-alpha
 PIHM_DIR = $$HOME/work/MM-PIHM
 
 # Required MM-PIHM version
-RQD_PIHM_VERS = 0.9.0-alpha
+RQD_PIHM_VERS = 0.0.0-alpha
 
 CC = gcc
 CFLAGS = -g -O2

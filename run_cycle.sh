@@ -34,8 +34,6 @@ mkdir -p $PIHM_DIR"/output/"$OUTPUT_DIR
 ##############################################
 # Read number of elements and river segments #
 ##############################################
-NELEM=$( head -1 $PIHM_DIR"/input/"$PROJECT"/"$PROJECT".mesh" |awk '{print $2}' )
-NRIVER=$( head -1 $PIHM_DIR"/input/"$PROJECT"/"$PROJECT".riv" |awk '{print $2}' )
 
 # Export variables
 export PIHM_DIR
@@ -47,8 +45,6 @@ export OBS_TBL
 export PERTURB_MODE
 export NUM_MEMBER
 export INFLT_WEIGHT
-export NELEM
-export NRIVER
 
 WORK_DIR=$PWD
 

@@ -8,7 +8,8 @@ else
     param="-as -o $OUTPUT_DIR"
 fi
 
-if [ $RUN_MODE -eq 0 ] ; then
+if [ $RUN_MODE -eq 0 ]; then
+    # Run MM-PIHM sequencially using current node
     for (( ind=1; ind<=$NUM_MEMBER; ind++ ))
     do
         simulation=$( printf '%s.%03d' $PROJECT $ind )
@@ -21,6 +22,7 @@ else
     # Create scripts directory
     mkdir -p scripts
 
+    # Submit PBS jobs for ensemble simulations
     jobid=()
 
     for (( ind=1; ind<=$NUM_MEMBER; ind++ ))

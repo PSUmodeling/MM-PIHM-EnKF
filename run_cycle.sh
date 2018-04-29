@@ -31,11 +31,9 @@ fi
 mkdir -p $PIHM_DIR"/output"
 mkdir -p $PIHM_DIR"/output/"$OUTPUT_DIR
 
-##############################################
-# Read number of elements and river segments #
-##############################################
-
-# Export variables
+####################
+# Export variables #
+####################
 export PIHM_DIR
 export PROJECT
 export OUTPUT_DIR
@@ -46,17 +44,18 @@ export PERTURB_MODE
 export NUM_MEMBER
 export INFLT_WEIGHT
 
+# Save current work directory
 WORK_DIR=$PWD
 
 ########################################################
 # Create initial parameter values through perturbation #
 ########################################################
-if [ $PERTURB_MODE -lt 3 ] ; then
+if [ $PERTURB_MODE -lt 3 ]; then
     echo
     echo "* Perturb initial parameter values..."
     echo
     ./util/perturb $(date -d "$CYCLE_START_TIME" +"%s" --utc)
-    if [ $? -ne 0 ] ; then
+    if [ $? -ne 0 ]; then
         exit 1
     fi
 fi
@@ -73,7 +72,7 @@ C_END_TIME=$ASSIM_START_TIME
 
 while [ $(date -d "$C_START_TIME" +"%s" --utc) -lt $(date -d "$CYCLE_END_TIME" +"%s" --utc) ]
 do
-    if [ "$C_END_TIME" == "$ASSIM_START_TIME" ] ; then
+    if [ "$C_END_TIME" == "$ASSIM_START_TIME" ]; then
         FIRST_CYCLE=1
     else
         FIRST_CYCLE=0
@@ -92,7 +91,7 @@ do
 
     cd $WORK_DIR
     ./util/assim $OBS_TIME $FIRST_CYCLE
-    if [ $? -ne 0 ] ; then
+    if [ $? -ne 0 ]; then
         exit 1
     fi
 

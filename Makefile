@@ -1,16 +1,16 @@
 # Makefile for MM-PIHM EnKF v0.1.0-alpha
 
+# Current MM-PIHM EnKF version
+VERS = 0.1.0-alpha
+
 # Please specify your MM-PIHM directory
 PIHM_DIR = $$HOME/work/MM-PIHM
-
-CC = gcc
-CFLAGS = -g -O2
 
 # Required MM-PIHM version
 RQD_PIHM_VERS = 0.9.0-alpha
 
-# Current MM-PIHM EnKF version
-VERS = 0.1.0-alpha
+CC = gcc
+CFLAGS = -g -O2
 
 ifeq ($(WARNING), on)
   CFLAGS += -Wall -Wextra

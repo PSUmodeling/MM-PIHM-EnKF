@@ -91,23 +91,6 @@ int main(int argc, char *argv[])
      */
     pihm = (pihm_struct)malloc(sizeof(*pihm));
 
-    pihm->cal = (calib_struct){
-        .ksath = 1.0, .ksatv = 1.0, .kinfv = 1.0, .kmach = 1.0, .kmacv = 1.0,
-        .dinf = 1.0, .rzd = 1.0, .dmac = 1.0,
-        .porosity = 1.0, .alpha = 1.0, .beta = 1.0,
-        .areafv = 1.0, .areafh = 1.0,
-        .vegfrac = 1.0, .albedo = 1.0, .rough = 1.0,
-        .ec = 1.0, .ett = 1.0, .edir = 1.0,
-        .rivrough = 1.0, .rivksath = 1.0, .rivksatv = 1.0,
-        .rivbedthick = 1.0, .rivdepth = 1.0, .rivshpcoeff = 1.0,
-        .prcp = 1.0, .sfctmp = 0.0,
-        .smcref = 1.0, .smcwlt = 1.0,
-        .rsmin = 1.0,
-        .drip = 1.0, .cmcmax = 1.0,
-        .czil = 1.0,
-        .fxexp = 1.0, .cfactr = 1.0,
-        .rgl = 1.0, .hs = 1.0};
-
     BuildPIHM(pihm_dir, project, pihm);
 
     /*

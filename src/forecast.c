@@ -34,12 +34,6 @@ void Forecast(const ens_struct *ens, const vartbl_struct *vartbl,
                     (ens->member[i].var[ind][k] * obs->k[k][j] + obs->b[k][j]);
             }
         }
-
-        if (strcasecmp(obs->name, "discharge") == 0)
-        {
-            xf[i] = log(xf[i] + 1.0);
-        }
-
     }
 
     for (i = 0; i < ne; i++)

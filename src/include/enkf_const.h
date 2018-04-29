@@ -13,6 +13,7 @@
                                  * expressed as fraction of initial standard
                                  * deviation */
 #define EPSILON         1.0E-6
+#define QMIN            1.0
 #define PERTURB         0
 #define ASSIM           1
 #define BADVAL          -999

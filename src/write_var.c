@@ -33,6 +33,12 @@ void WriteVarOutput(const char *pihm_dir, const char *output_dir,
                 fwrite(&outtime, sizeof(double), 1, fp);
                 for (j = 0; j < vartbl[k].dim; j++)
                 {
+                    if (strcasecmp(vartbl[k].name, "rivflx1") == 0)
+                    {
+                        ens->member[i].var[k][j] =
+                            exp(ens->member[i].var[k][j]) - QMIN;
+                        ens->member[i].var[k][j] /= 24.0 * 3600.0;
+                    }
                     fwrite(&ens->member[i].var[k][j], sizeof(double), 1, fp);
                 }
                 fflush(fp);

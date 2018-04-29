@@ -14,7 +14,7 @@ void ReadEnsVar(const char *pihm_dir, const char *project,
 #endif
     for (i = 0; i < ne; i++)
     {
-        int             k;
+        int             j, k;
         char            fn[MAXSTRING];
         FILE           *fid;
         double          ctime;
@@ -42,6 +42,17 @@ void ReadEnsVar(const char *pihm_dir, const char *project,
                     {
                         fread(ens->member[i].var[k], sizeof(double),
                             vartbl[k].dim, fid);
+
+                        if (strcasecmp(vartbl[k].name, "rivflx1") == 0)
+                        {
+                            for (j = 0; j < vartbl[k].dim; j++)
+                            {
+                                ens->member[i].var[k][j] *= 24.0 * 3600.0;
+                                ens->member[i].var[k][j] =
+                                    log(ens->member[i].var[k][j] + QMIN);
+                            }
+                        }
+
                         success = 1;
                         break;
                     }

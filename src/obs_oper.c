@@ -73,7 +73,7 @@ void DischOper(obstbl_struct *obs, const vartbl_struct *vartbl,
     }
 
     /* Use weight to convert unit */
-    obs->weight[ind_min] = 24.0 * 3600.0;
+    obs->weight[ind_min] = 1.0;
     obs->k[ind_min][0] = 1.0;
 }
 

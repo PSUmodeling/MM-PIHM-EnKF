@@ -22,7 +22,7 @@ SURF_MODE           2
 RIV_MODE            2
 START               $START_TIME
 END                 $END_TIME
-MAX_SPINUP_YEAR     100
+MAX_SPINUP_YEAR     0
 MODEL_STEPSIZE      60
 LSM_STEP            900
 

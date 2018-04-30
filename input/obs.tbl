@@ -1,4 +1,4 @@
 OBS_TYPE            OBS_FILE                LOCATION_X  LOCATION_Y  RADIUS  DEPTH
 discharge           input/discharge.txt     254209.83   4505410.76  0.0     0.0
-#COSMOS             input/COSMOS.dat        254476.61   4505398.95  350.0   0.0
 skin_temperature    input/t1.txt            254448.31   4505380.39  500.0   0.0
+#COSMOS             input/COSMOS.dat        254476.61   4505398.95  350.0   0.0

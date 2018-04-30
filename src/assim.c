@@ -111,7 +111,7 @@ int main(int argc, char *argv[])
 
     WriteInit(pihm_dir, project, vartbl, &ens);
 
-    //WriteCalFile(pihm_dir, project, paramtbl, &ens);
+    WriteCalFile(pihm_dir, project, paramtbl, &ens);
 
     /*
      * Free memory

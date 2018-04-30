@@ -1,5 +1,8 @@
 #!/bin/sh
 
+OMP_THREADS=20
+QUEUE=open
+
 first_cycle=$1
 
 if [ $first_cycle == 1 ]; then
@@ -13,7 +16,7 @@ if [ $RUN_MODE -eq 0 ]; then
     for (( ind=1; ind<=$NUM_MEMBER; ind++ ))
     do
         simulation=$( printf '%s.%03d' $PROJECT $ind )
-        export OMP_NUM_THREADS=20
+        export OMP_NUM_THREADS=$OMP_THREADS
         cd $PIHM_DIR
         echo "    Running ensemble member $ind"
         ./flux-pihm $param $simulation
@@ -34,14 +37,14 @@ else
         cat << EOF > "scripts/run_pihm.sh"
 #!/bin/bash
 #PBS -N $jobname
-#PBS -l nodes=1:ppn=20
+#PBS -l nodes=1:ppn=OMP_THREADS
 #PBS -l walltime=1:00:00
-#PBS -A open
+#PBS -A $QUEUE
 #PBS -j oe
 #PBS -o $PIHM_DIR/job$ind.log
 #PBS -d $PIHM_DIR
 
-export OMP_NUM_THREADS=20
+export OMP_NUM_THREADS=$OMP_THREADS
 cd $PIHM_DIR
 ./flux-pihm $param $simulation
 EOF

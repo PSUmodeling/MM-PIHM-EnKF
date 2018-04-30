@@ -110,3 +110,11 @@ You can change the number of OMP threads or PBS queue name if you use different 
 ### util/write_para.sh
 
 This script is invoked to write `.para` input files for MM-PIHM simulations.
+
+### util/perturb
+
+This is an executable compiled from C source files to perform initial perturbation.
+
+### util/assim
+
+This is an executable compiled from C source files to perform EnKF analysis step.

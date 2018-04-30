@@ -179,17 +179,17 @@ void Assim(const char *pihm_dir, const char *output_dir,
                 break;
             }
 
-            printf("\n# %s\n", obstbl[i].name);
+            printf("\n  # %s\n", obstbl[i].name);
 
             /* Read observations */
             ReadObs(t, obstbl[i].fname, &obs, &obs_error);
 
-            printf("  observed value = %lf (error: %lf)\n", obs, obs_error);
+            printf("    observed value = %lf (error: %lf)\n", obs, obs_error);
 
             /* Read ensemble forecasts */
             Forecast(ens, vartbl, &obstbl[i], xf);
 
-            printf("  prediction = ");
+            printf("    prediction = ");
             for (j = 0; j < ne; j++)
             {
                 printf("%f\t", xf[j]);
@@ -249,13 +249,13 @@ void SavePrior(const ens_struct *ens, const vartbl_struct *vartbl,
     }
 }
 
-#if defined(_OPENMP)
-# pragma omp parallel for
-#endif
 void FreeEnsMbr(const vartbl_struct *vartbl, ens_struct *ens)
 {
     int             i;
 
+#if defined(_OPENMP)
+# pragma omp parallel for
+#endif
     for (i = 0; i < ens->ne; i++)
     {
         int             k;

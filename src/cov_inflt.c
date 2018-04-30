@@ -7,7 +7,7 @@ void CovInflt(const paramtbl_struct *paramtbl, const vartbl_struct *vartbl,
     int             ne;
     ne = ens->ne;
 
-    printf("\n*****Parameters********\n");
+    printf("\n  # Parameters\n");
 
 #if defined(_OPENMP)
 # pragma omp parallel for
@@ -65,12 +65,12 @@ void CovInflt(const paramtbl_struct *paramtbl, const vartbl_struct *vartbl,
                 {
                     xa[ne] = pow(10.0, xa[ne]);
                 }
-                printf("%s\tmean: %lf\n", paramtbl[k].name, xa[ne]);
+                printf("    %s\tmean: %lf\n", paramtbl[k].name, xa[ne]);
             }
             else
             {
-                printf("%s\tEnKF update %lf is out of range and is rejected.\n",
-                    paramtbl[k].name, xa[i]);
+                printf("    %s\tEnKF update %lf is out of range "
+                    "and is rejected.\n", paramtbl[k].name, xa[i]);
                 for (i = 0; i < ne; i++)
                 {
                     xa[i] = xf[i];
@@ -130,7 +130,7 @@ void CovInflt(const paramtbl_struct *paramtbl, const vartbl_struct *vartbl,
         }
     }
 
-    printf("Inflation done!\n");
+    printf("\n  Covariance inflation done.\n");
 }
 
 void CovRelax(double weight, int ne, const double *xf, double *xa)

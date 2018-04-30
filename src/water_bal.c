@@ -19,6 +19,9 @@ void WaterBal(const paramtbl_struct *paramtbl, const vartbl_struct *vartbl,
         sh2o_ind[kk] = FindVar(varn, vartbl);
     }
 
+#if defined(_OPENMP)
+# pragma omp parallel for
+#endif
     for (n = 0; n < ens->ne; n++)
     {
         elem_struct    *elem;

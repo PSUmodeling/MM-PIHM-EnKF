@@ -3,11 +3,14 @@
 void ReadParamTbl(const char *fname, paramtbl_struct *paramtbl)
 {
     char            cmdstr[MAXSTRING];
-    FILE           *fid;
+    FILE           *fp;
     int             i;
     int             lno = 0;
 
     /* Initial parameter table */
+#if defined(_OPENMP)
+# pragma omp parallel for
+#endif
     for (i = 0; i < MAXPARAM; i++)
     {
         paramtbl[i].perturb = 0;
@@ -16,16 +19,16 @@ void ReadParamTbl(const char *fname, paramtbl_struct *paramtbl)
     }
 
     /* Open parameter table */
-    fid = fopen(fname, "r");
-    CheckFile(fid, fname);
+    fp = fopen(fname, "r");
+    CheckFile(fp, fname);
 
     /* Header line */
-    FindLine(fid, "PARAMETER", &lno, fname);
+    FindLine(fp, "PARAMETER", &lno, fname);
 
     /* Start reading parameter table */
     for (i = 0; i < MAXPARAM; i++)
     {
-        NextLine(fid, cmdstr, &lno);
+        NextLine(fp, cmdstr, &lno);
         if (strcasecmp(cmdstr, "EOF") == 0)
         {
             break;
@@ -42,7 +45,7 @@ void ReadParamTbl(const char *fname, paramtbl_struct *paramtbl)
             }
 
             /* Convert parameters that should be perturbed in log space */
-            if (paramtbl[i].type == 1)
+            if (paramtbl[i].type == LOG_TYPE)
             {
                 paramtbl[i].min = log10(paramtbl[i].min);
                 paramtbl[i].max = log10(paramtbl[i].max);
@@ -52,5 +55,5 @@ void ReadParamTbl(const char *fname, paramtbl_struct *paramtbl)
         }
     }
 
-    fclose(fid);
+    fclose(fp);
 }

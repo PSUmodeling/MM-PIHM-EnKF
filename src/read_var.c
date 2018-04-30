@@ -43,6 +43,13 @@ void ReadEnsVar(const char *pihm_dir, const char *project,
                         fread(ens->member[i].var[k], sizeof(double),
                             vartbl[k].dim, fid);
 
+                        /* Convert discharge predictions to log space to improve
+                         * EnKF performance (Clark et al. 2008 AWR).
+                         * The discharge unit is converted to m3/d.
+                         * To avoid exaggerated errors and associated system
+                         * shocks at lowflows, and to avoid taking log of a zero
+                         * discharge, a QMIN discharge rate is added (Shi et al.
+                         * 2015 AWR) */
                         if (strcasecmp(vartbl[k].name, "rivflx1") == 0)
                         {
                             for (j = 0; j < vartbl[k].dim; j++)

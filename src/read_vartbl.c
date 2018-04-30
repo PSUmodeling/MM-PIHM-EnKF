@@ -3,28 +3,31 @@
 void ReadVarTbl(const char *fname, int nelem, int nriver, vartbl_struct *vartbl)
 {
     char            cmdstr[MAXSTRING];
-    FILE           *fid;
+    FILE           *fp;
     char            type[MAXSTRING];
     int             i;
     int             lno = 0;
 
     /* Initial vareter table */
+#if defined(_OPENMP)
+# pragma omp parallel for
+#endif
     for (i = 0; i < MAXVAR; i++)
     {
         vartbl[i].dim = 0;
     }
 
     /* Open variable table */
-    fid = fopen (fname, "r");
-    CheckFile(fid, fname);
+    fp = fopen (fname, "r");
+    CheckFile(fp, fname);
 
     /* Header line */
-    FindLine(fid, "VARIABLE", &lno, fname);
+    FindLine(fp, "VARIABLE", &lno, fname);
 
     /* Start reading variable table */
     for (i = 0; i < MAXVAR; i++)
     {
-        NextLine(fid, cmdstr, &lno);
+        NextLine(fp, cmdstr, &lno);
         if (strcasecmp(cmdstr, "EOF") == 0)
         {
             break;
@@ -55,5 +58,5 @@ void ReadVarTbl(const char *fname, int nelem, int nriver, vartbl_struct *vartbl)
         }
     }
 
-    fclose(fid);
+    fclose(fp);
 }

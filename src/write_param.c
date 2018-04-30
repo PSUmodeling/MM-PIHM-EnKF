@@ -3,15 +3,20 @@
 void WriteParamOutput(const char *pihm_dir, const char *output_dir,
     const paramtbl_struct *paramtbl, int t, int flag, ens_struct *ens)
 {
-    char            fn[MAXSTRING];
-    FILE           *fp;
-    int             i, j;
+    int             i;
     pihm_t_struct   pihm_time;
 
     pihm_time = PIHMTime(t);
 
+#if defined(_OPENMP)
+# pragma omp parallel for
+#endif
     for (i = 0; i < MAXPARAM; i++)
     {
+        char            fn[MAXSTRING];
+        FILE           *fp;
+        int             j;
+
         if ((1 == paramtbl[i].perturb && PERTURB == flag) ||
             (1 == paramtbl[i].update && ASSIM == flag))
         {

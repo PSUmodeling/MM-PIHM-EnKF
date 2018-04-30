@@ -2,6 +2,9 @@
 
 void ReadObs(int t, const char *fname, double *obs, double *obs_error)
 {
+    /*
+     * Read observations from observation files
+     */
     FILE           *fp;
     char            cmdstr[MAXSTRING];
     char            str1[MAXSTRING], str2[MAXSTRING];
@@ -19,6 +22,8 @@ void ReadObs(int t, const char *fname, double *obs, double *obs_error)
 
         if (strcasecmp (cmdstr, "EOF") == 0)
         {
+            /* Reaches the end of file without finding observation for the
+             * specified time */
             printf("\nError: No observation available at %d in %s.\n",
                 t, fname);
             exit(EXIT_FAILURE);
@@ -26,6 +31,7 @@ void ReadObs(int t, const char *fname, double *obs, double *obs_error)
         else if (sscanf(cmdstr, "%s %s %lf %lf", str1, str2, obs, obs_error) !=
             4)
         {
+            /* Format error */
             printf("Error: observation file format error.");
             exit(EXIT_FAILURE);
         }

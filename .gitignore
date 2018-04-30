@@ -57,3 +57,5 @@ util/assim
 
 # Temporary scripts
 /scripts/
+!run_cycles.sh
+*.sh

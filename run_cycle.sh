@@ -96,6 +96,6 @@ do
     fi
 
     # Advance time by assimilation interval
-    C_START_TIME=$(date -d "$C_START_TIME $ASSIM_INTVL hour" +"%Y-%m-%d %H:%M" --utc)
+    C_START_TIME=$C_END_TIME
     C_END_TIME=$(date -d "$C_END_TIME $ASSIM_INTVL hour" +"%Y-%m-%d %H:%M" --utc)
 done

@@ -113,6 +113,9 @@ int main(int argc, char *argv[])
 
     //WriteCalFile(pihm_dir, project, paramtbl, &ens);
 
+    /*
+     * Free memory
+     */
     FreeObsOper(obstbl);
     FreeEnsMbr(vartbl, &ens);
 
@@ -148,10 +151,14 @@ void Assim(const char *pihm_dir, const char *output_dir,
 
     ne = ens->ne;
 
+    /* Save prior parameters and states for inflation */
     SavePrior(ens, vartbl, &prior);
 
-    printf("\nStarting EnKF ... \n");
+    printf("\n  Starting EnKF ... \n");
 
+    /*
+     * Assimilate observations using sequential processing
+     */
     if (obstbl[0].name[0] != '\0')
     {
         sprintf(obs_out_fn, "%s/output/%s/obs.dat", pihm_dir, output_dir);
@@ -172,18 +179,17 @@ void Assim(const char *pihm_dir, const char *output_dir,
                 break;
             }
 
-            printf("\n*****%s******\n", obstbl[i].name);
+            printf("\n# %s\n", obstbl[i].name);
 
             /* Read observations */
             ReadObs(t, obstbl[i].fname, &obs, &obs_error);
 
-            printf("observed value = %lf (error: %lf)\n", obs, obs_error);
+            printf("  observed value = %lf (error: %lf)\n", obs, obs_error);
 
             /* Read ensemble forecasts */
             Forecast(ens, vartbl, &obstbl[i], xf);
 
-            /* Prepare forecast vectors */
-            printf("prediction = ");
+            printf("  prediction = ");
             for (j = 0; j < ne; j++)
             {
                 printf("%f\t", xf[j]);
@@ -191,9 +197,9 @@ void Assim(const char *pihm_dir, const char *output_dir,
             printf("mean: %f\n", xf[ne]);
 
             /* Write observations to files */
-
             fprintf(obs_fp, "\t%lf", obs);
 
+            /* EnKF analysis */
             Anlys(paramtbl, vartbl, obs, obs_error, xf, ens);
         }
 
@@ -243,6 +249,9 @@ void SavePrior(const ens_struct *ens, const vartbl_struct *vartbl,
     }
 }
 
+#if defined(_OPENMP)
+# pragma omp parallel for
+#endif
 void FreeEnsMbr(const vartbl_struct *vartbl, ens_struct *ens)
 {
     int             i;

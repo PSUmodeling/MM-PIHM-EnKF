@@ -21,7 +21,7 @@ void ReadObs(int t, const char *fname, double *obs, double *obs_error)
         {
             printf("\nError: No observation available at %d in %s.\n",
                 t, fname);
-            exit(1);
+            exit(EXIT_FAILURE);
         }
         else if (sscanf(cmdstr, "%s %s %lf %lf", str1, str2, obs, obs_error) !=
             4)

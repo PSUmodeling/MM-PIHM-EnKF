@@ -5,6 +5,7 @@ void CovInflt(const paramtbl_struct *paramtbl, const vartbl_struct *vartbl,
 {
     int             k;
     int             ne;
+
     ne = ens->ne;
 
     printf("\n  # Parameters\n");
@@ -20,6 +21,7 @@ void CovInflt(const paramtbl_struct *paramtbl, const vartbl_struct *vartbl,
 
         if (1 == paramtbl[k].update)
         {
+            /* Get analysis and prior */
             xa[ne] = 0.0;
             xf[ne] = 0.0;
             for (i = 0; i < ne; i++)
@@ -28,8 +30,8 @@ void CovInflt(const paramtbl_struct *paramtbl, const vartbl_struct *vartbl,
                 xf[i] = prior->member[i].param[k];
 
                 /* Take log if necessary */
-                xa[i] = (1 == paramtbl[k].type) ? log10(xa[i]) : xa[i];
-                xf[i] = (1 == paramtbl[k].type) ? log10(xf[i]) : xf[i];
+                xa[i] = (LOG_TYPE == paramtbl[k].type) ? log10(xa[i]) : xa[i];
+                xf[i] = (LOG_TYPE == paramtbl[k].type) ? log10(xf[i]) : xf[i];
 
                 xa[ne] += xa[i];
                 xf[ne] += xf[i];
@@ -38,6 +40,7 @@ void CovInflt(const paramtbl_struct *paramtbl, const vartbl_struct *vartbl,
             xa[ne] /= (double)ne;
             xf[ne] /= (double)ne;
 
+            /* Threshold for conditional covariance inflation */
             thr_std = CCI_THR * INIT_STD * (paramtbl[k].max - paramtbl[k].min);
 
             if (xa[ne] < paramtbl[k].max - thr_std &&
@@ -49,11 +52,12 @@ void CovInflt(const paramtbl_struct *paramtbl, const vartbl_struct *vartbl,
                 /* Conditional covariance inflation */
                 CondCovInflt(thr_std, ne, xa);
 
+                /* Plausible range constraint */
                 PlsblRngCstr(paramtbl[k].max, paramtbl[k].min, ne, xa);
 
                 for (i = 0; i < ne; i++)
                 {
-                    if (1 == paramtbl[k].type)
+                    if (LOG_TYPE == paramtbl[k].type)
                     {
                         xa[i] = pow(10.0, xa[i]);
                     }
@@ -61,7 +65,7 @@ void CovInflt(const paramtbl_struct *paramtbl, const vartbl_struct *vartbl,
                     ens->member[i].param[k] = xa[i];
                 }
 
-                if (1 == paramtbl[k].type)
+                if (LOG_TYPE == paramtbl[k].type)
                 {
                     xa[ne] = pow(10.0, xa[ne]);
                 }
@@ -74,7 +78,7 @@ void CovInflt(const paramtbl_struct *paramtbl, const vartbl_struct *vartbl,
                 for (i = 0; i < ne; i++)
                 {
                     xa[i] = xf[i];
-                    if (1 == paramtbl[k].type)
+                    if (LOG_TYPE == paramtbl[k].type)
                     {
                         xa[i] = pow(10.0, xf[i]);
                     }
@@ -110,8 +114,10 @@ void CovInflt(const paramtbl_struct *paramtbl, const vartbl_struct *vartbl,
                 xa[ne] /= (double)ne;
                 xf[ne] /= (double)ne;
 
+                /* Covariance relaxation */
                 CovRelax(weight, ne, xf, xa);
 
+                /* Constrain varialbes by their plausible ranges */
                 for (i = 0; i < ne; i++)
                 {
                     if (roundi(vartbl[k].max) != BADVAL)

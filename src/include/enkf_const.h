@@ -16,6 +16,7 @@
 #define QMIN            1.0
 #define PERTURB         0
 #define ASSIM           1
+#define LOG_TYPE        1
 #define BADVAL          -999
 
 //enum prmt_type {

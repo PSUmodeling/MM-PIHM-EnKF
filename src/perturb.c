@@ -78,7 +78,7 @@ int main(int argc, char *argv[])
     counter = 0;
     for (i = 0; i < MAXPARAM; i++)
     {
-        if (paramtbl[i].perturb == 1)
+        if (1 == paramtbl[i].perturb)
         {
             ind[counter] = i;
             counter++;
@@ -160,6 +160,9 @@ int main(int argc, char *argv[])
 
 double Randn(void)
 {
+    /*
+     * Random number generator with Gaussian distribution
+     */
     double          temp1, temp2;
     double          x;
 
@@ -171,13 +174,13 @@ double Randn(void)
     return x;
 }
 
-/*
- * Function GenRandNum will generate groups of random numbers within
- * (-range, range). The correlation between groups should be smaller that
- * specified value to make sure groups are perturbed independently
- */
 void GenRandNum(int ne, int nparam, double **randnum, double range)
 {
+    /*
+     * Function GenRandNum will generate groups of random numbers within
+     * (-range, range). The correlation between groups should be smaller that
+     * specified value to make sure groups are perturbed independently
+     */
     int             i, j, k;
     double          corr;
     double          mean;

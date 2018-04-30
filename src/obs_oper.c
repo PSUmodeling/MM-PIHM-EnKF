@@ -38,6 +38,9 @@ void ObsOper(obstbl_struct *obstbl, const vartbl_struct *vartbl,
 void DischOper(obstbl_struct *obs, const vartbl_struct *vartbl,
     const pihm_struct pihm)
 {
+    /*
+     * Discharge observation operator
+     */
     double          dist;
     double          dist_min = 999999999.9;
     int             ind_min;
@@ -80,6 +83,9 @@ void DischOper(obstbl_struct *obs, const vartbl_struct *vartbl,
 void LandSfcTmpOper(obstbl_struct *obs, const vartbl_struct *vartbl,
     const pihm_struct pihm)
 {
+    /*
+     * Land surface temperature observation operator
+     */
     obs->var_ind = (int *)malloc(sizeof(int));
     obs->var_ind[0] = FindVar("t1", vartbl);
 
@@ -94,6 +100,9 @@ void LandSfcTmpOper(obstbl_struct *obs, const vartbl_struct *vartbl,
 void COSMOSOper(obstbl_struct *obs, const vartbl_struct *vartbl,
     const pihm_struct pihm)
 {
+    /*
+     * COSMOS observation operator
+     */
     obs->var_ind = (int *)malloc(sizeof(int));
     obs->var_ind[0] = FindVar("smc0", vartbl);
 
@@ -182,6 +191,9 @@ void FreeObsOper(obstbl_struct *obstbl)
 {
     int             i;
 
+#if defined(_OPENMP)
+# pragma omp parallel for
+#endif
     for (i = 0; i < MAXOBS; i++)
     {
         int             k;

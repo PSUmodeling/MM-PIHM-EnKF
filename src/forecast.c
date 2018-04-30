@@ -3,6 +3,9 @@
 void Forecast(const ens_struct *ens, const vartbl_struct *vartbl,
     const obstbl_struct *obs, double *xf)
 {
+    /*
+     * Apply observation operators to obtain ensemble forecast
+     */
     int             i;
     int             ne;
 

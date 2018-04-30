@@ -183,12 +183,10 @@ void Assim(const char *pihm_dir, const char *output_dir,
 
             /* Read observations */
             ReadObs(t, obstbl[i].fname, &obs, &obs_error);
-
             printf("    observed value = %lf (error: %lf)\n", obs, obs_error);
 
             /* Read ensemble forecasts */
             Forecast(ens, vartbl, &obstbl[i], xf);
-
             printf("    prediction = ");
             for (j = 0; j < ne; j++)
             {

@@ -37,9 +37,15 @@ void BuildPIHM(const char *pihm_dir, const char *project, pihm_struct pihm)
     /* Read LSM input file */
     ReadLsm(pihm->filename.lsm, &pihm->siteinfo, &pihm->ctrl, &pihm->noahtbl);
 
+    /*
+     * Initialize PIHM structures
+     */
     pihm->elem = (elem_struct *)malloc(nelem * sizeof(elem_struct));
     pihm->river = (river_struct *)malloc(nriver * sizeof(river_struct));
 
+#if defined(_OPENMP)
+# pragma omp parallel for
+#endif
     for (i = 0; i < nelem; i++)
     {
         pihm->elem[i].attrib.soil_type = pihm->atttbl.soil[i];

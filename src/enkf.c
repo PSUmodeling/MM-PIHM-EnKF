@@ -25,16 +25,18 @@ void Anlys(const paramtbl_struct *paramtbl, const vartbl_struct *vartbl,
             for (i = 0; i < ne; i++)
             {
                 xa[i] = ens->member[i].param[k];
-                xa[i] = (1 == paramtbl[k].type) ? log10(xa[i]) : xa[i];
+                xa[i] = (LOG_TYPE == paramtbl[k].type) ? log10(xa[i]) : xa[i];
                 xa[ne] += xa[i];
             }
             xa[ne] /= (double)ne;
 
+            /* EnKF analysis */
             EnKF(xa, obs, obs_error, xf, ne);
 
             for (i = 0; i < ne; i++)
             {
-                xa[i] = (1 == paramtbl[k].type) ? pow(10.0, xa[i]) : xa[i];
+                xa[i] =
+                    (LOG_TYPE == paramtbl[k].type) ? pow(10.0, xa[i]) : xa[i];
                 ens->member[i].param[k] = xa[i];
             }
         }
@@ -65,6 +67,7 @@ void Anlys(const paramtbl_struct *paramtbl, const vartbl_struct *vartbl,
                 }
                 xa[ne] /= (double)ne;
 
+                /* EnKF analysis */
                 EnKF(xa, obs, obs_error, xf, ne);
 
                 for (i = 0; i < ne; i++)

@@ -1,6 +1,8 @@
 #ifndef ENKF_FUNC_HEADER
 #define ENKF_FUNC_HEADER
 
+double          ltqnorm(double);
+
 void            Anlys(const paramtbl_struct *, const vartbl_struct *, double,
     double, const double *, ens_struct *);
 void            Assim(const char *, const char *, const paramtbl_struct *,
@@ -30,7 +32,7 @@ void            ObsOper(obstbl_struct *, const vartbl_struct *,
     const pihm_struct);
 void            ObsOperAlloc(obstbl_struct *);
 void            PlsblRngCstr(double, double, int, double *);
-double          Randn(void);
+void            Randn(int, double, double *);
 void            ReadEnsParam(const char *, const char *, const paramtbl_struct *,
     ens_struct *);
 void            ReadEnsVar(const char *, const char *, const char *, int,
@@ -43,6 +45,7 @@ void            ReadVarTbl(const char *, int, int, vartbl_struct *);
 int             roundi(double);
 void            SavePrior(const ens_struct *, const vartbl_struct *,
     ens_struct *);
+void            Shuffle(const double *, int, double *);
 void            WaterBal(const paramtbl_struct *, const vartbl_struct *,
     pihm_struct, ens_struct *);
 void            WeightByArea(const elem_struct *, obstbl_struct *);

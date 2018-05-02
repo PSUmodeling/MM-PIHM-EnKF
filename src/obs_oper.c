@@ -43,7 +43,7 @@ void DischOper(obstbl_struct *obs, const vartbl_struct *vartbl,
      */
     double          dist;
     double          dist_min = 999999999.9;
-    int             ind_min;
+    int             ind_min = 0;
     int             i;
 
     obs->var_ind = (int *)malloc(sizeof(int));

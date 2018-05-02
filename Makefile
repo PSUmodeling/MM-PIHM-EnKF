@@ -64,7 +64,10 @@ ENKF_IO_SRCS_ =\
 	write_var.c
 ENKF_IO_LIB = ./lib/enkfiolib.a
 
-PERTURB_SRCS_ = perturb.c
+PERTURB_SRCS_ =\
+	ltqnorm/ltqnorm.c\
+	perturb.c
+
 ASSIM_SRCS_ =\
 	assim.c\
 	build_pihm.c\

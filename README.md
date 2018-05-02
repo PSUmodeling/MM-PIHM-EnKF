@@ -25,7 +25,7 @@ The "EnKF configuration block defines parameters for the data assimilation proce
 * `PERTURB_MODE`: initial parameter perturbation mode.
 
   When `PERTURB_MODE` is 3, existing `.calib` files will be used without perturbing model parameters.
-  When `PERTURB_MODE` is between -1 and 1, perturbed mean will be equal to (center of parameter range + `PERTURB_MODE` * SIGMA),
+  When `PERTURB_MODE` is between -1 and 1, perturbed mean will be equal to (center of parameter range + `PERTURB_MODE` * SIGMA / 2),
   where SIGMA is the initial standard deviation of parameters.
 * `INFL_WEIGHT`:  covariance relaxation weight.
 * `CYCLE_START_TIME` and `CYCLE_END_TIME`: EnKF cycle start and end times in "yyyy-mm-dd HH:MM".
@@ -42,10 +42,10 @@ The "MM-PIHM configuration" block defines parameters for MM-PIHM.
 
   If `RUN_MODE` is 0, ensemble simulations will be performed on current node sequentially without submitting jobs.
   This is good for a small number of ensemble members, in which case PBS queue time could be longer than running those simulations sequentially.
-  
+
   If `RUN_MODE` is 1, ensemble simulations will be submitted as PBS jobs.
   This is desirable if you have your own PBS queue so wait time is minimum.
-  
+
 ### param.tbl
 
 The parameter table (`param.tbl`) should contain all calibration coefficients that are required by MM-PIHM, including those that are not to be perturbed or estimated by EnKF.
@@ -118,3 +118,11 @@ This is an executable compiled from C source files to perform initial perturbati
 ### util/assim
 
 This is an executable compiled from C source files to perform EnKF analysis step.
+
+## ACKNOWLEDGMENT
+
+This code uses the the inverse cumulative normal distribution code developed by Peter John Acklam [3].
+
+## REFERENCES
+
+[3] Packer, J. S., et al., 2015: CLAMMS: A scalable algorithm for calling common and rare copy number variants from exome sequencing data. *Bioinformatics*, **32**,133--135.

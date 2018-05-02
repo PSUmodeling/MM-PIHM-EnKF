@@ -99,10 +99,10 @@ int main(int argc, char *argv[])
      * The initial standard deviation (sigma) of perturbed parameter is INIT_STD
      * of parameter range. The allowed range for generated random number is
      * therefore
-     * [(-0.5 / INIT_STD - abs(perturb_mode) / sigma,
-     * (0.5 / INIT_STD - abs(perturb_mode) / sigma] */
+     * [(-0.5 / INIT_STD - 0.5 * abs(perturb_mode) / sigma,
+     * (0.5 / INIT_STD - 0.5 * abs(perturb_mode) / sigma] */
     GenRandNum(ens.ne, counter, randnum,
-        0.5 / INIT_STD - fabs((double)perturb_mode));
+        0.5 / INIT_STD - 0.5 * fabs((double)perturb_mode));
 
     /* Assign random numbers to parameter values */
     printf("\n  Initial parameters\n");
@@ -124,7 +124,7 @@ int main(int argc, char *argv[])
 
         prior_std = INIT_STD * (paramtbl[ind[i]].max - paramtbl[ind[i]].min);
         prior = (paramtbl[ind[i]].min + paramtbl[ind[i]].max) / 2.0 +
-            (double)perturb_mode * prior_std;
+            0.5 * (double)perturb_mode * prior_std;
 
         for (j = 0; j < ens.ne; j++)
         {
@@ -158,20 +158,68 @@ int main(int argc, char *argv[])
     return EXIT_SUCCESS;
 }
 
-double Randn(void)
+void Randn(int n, double range, double *x)
 {
     /*
      * Random number generator with Gaussian distribution
      */
-    double          temp1, temp2;
-    double          x;
+    int             i;
+    double          mean = 0.0;
+    double          std = 0.0;
+    const double    TAIL = 0.05;
 
-    temp1 = (double)rand() / RAND_MAX;
-    temp2 = (double)rand() / RAND_MAX;
+    for (i = 0; i < n; i++)
+    {
+        x[i] =
+            TAIL + ((double)(i + 1) * (1.0 - 2.0 * TAIL)) / ((double)(n + 1));
+        x[i] = ltqnorm(x[i]);
+        mean += x[i];
+    }
 
-    x = sqrt(-2.0 * log(temp1)) * cos(2.0 * PI * temp2);
+    mean /= (double)n;
 
-    return x;
+    /* Calcualte standard deviation of generated numbers */
+    for (i = 0; i < n; i++)
+    {
+        std += (x[i] - mean) * (x[i] - mean);
+    }
+    std = sqrt(std / ((double)n - 1.0));
+
+    /* Adjust generated random numbers so that they have means of
+     * zero and standard deviations of 1.0 */
+    for (i = 0; i < n; i++)
+    {
+        x[i] = (x[i] - mean) / std * 1.0;
+
+        if (x[i] <= -range || x[i] >= range)
+        {
+            printf ("Error: cannot generate normal distribution "
+                "within given range.\n");
+            exit(EXIT_FAILURE);
+        }
+    }
+}
+
+void Shuffle(const double *seed, int n, double *x)
+{
+    double          t;
+    int             i, j;
+
+    if (n > 1)
+    {
+        for (i = 0; i < n; i++)
+        {
+            x[i] = seed[i];
+        }
+
+        for (i = 0; i < n - 1; i++)
+        {
+            j = i + rand() / (RAND_MAX / (n - i) + 1);
+            t = x[j];
+            x[j] = x[i];
+            x[i] = t;
+        }
+    }
 }
 
 void GenRandNum(int ne, int nparam, double **randnum, double range)
@@ -183,10 +231,8 @@ void GenRandNum(int ne, int nparam, double **randnum, double range)
      */
     int             i, j, k;
     double          corr;
-    double          mean;
-    double          std;
+    double          norm[MAXNE];
     int             corr_flag;
-    int             range_flag = 1;
     double          s1, s2;
     double          max = -999.0;
 
@@ -196,51 +242,17 @@ void GenRandNum(int ne, int nparam, double **randnum, double range)
     /* Random number seed */
     srand(time(NULL));
 
+    /* Create normally distributed random numbers within specified range */
+    Randn(ne, range, norm);
+
     do
     {
         max = -999.0;
 
+        /* Shuffle generated random numbers */
         for (j = 0; j < nparam; j++)
         {
-            range_flag = 1;
-
-            while (range_flag)
-            {
-                mean = 0.0;
-                std = 0.0;
-
-                /* Generate random numbers and calculate means */
-                for (i = 0; i < ne; i++)
-                {
-                    randnum[j][i] = Randn();
-                    mean += randnum[j][i];
-                }
-
-                mean /= (double)ne;
-
-                /* Calcualte standard deviation of generated numbers */
-                for (i = 0; i < ne; i++)
-                {
-                    std += (randnum[j][i] - mean) * (randnum[j][i] - mean);
-                }
-                std = sqrt(std / ((double)ne - 1.0));
-
-                range_flag = 0;
-
-                /* Adjust generated random numbers so that they have means of
-                 * zero and standard deviations of 1.0 */
-                for (i = 0; i < ne; i++)
-                {
-                    randnum[j][i] = (randnum[j][i] - mean) / std * 1.0;
-
-                    /* If any random number is out of range, re-generate */
-                    if (randnum[j][i] <= -range || randnum[j][i] >= range)
-                    {
-                        range_flag = 1;
-                        break;
-                    }
-                }
-            }
+            Shuffle(norm, ne, randnum[j]);
         }
 
         /* Check correlations between groups of random numbers */

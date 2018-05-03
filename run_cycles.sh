@@ -99,3 +99,6 @@ do
     C_START_TIME=$C_END_TIME
     C_END_TIME=$(date -d "$C_END_TIME $ASSIM_INTVL hour" +"%Y-%m-%d %H:%M" --utc)
 done
+
+echo
+echo "EnKF cycles complete."

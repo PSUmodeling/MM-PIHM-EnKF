@@ -64,7 +64,7 @@ void            AdjSmProf(const soil_struct *, const pstate_struct *,
 int             FindWaterTable(const double *, int, double, double *);
 void            FreeAtttbl(atttbl_struct *);
 void            FreeMatltbl(matltbl_struct *);
-void            FreeMeshTbl(meshtbl_struct *);
+void            FreeMeshtbl(meshtbl_struct *);
 void            FreeRivtbl(rivtbl_struct *);
 void            FreeShptbl(shptbl_struct *);
 void            FreeSoiltbl(soiltbl_struct *);

@@ -1,17 +1,22 @@
 # MM-PIHM-EnKF
-MM-PIHM EnKF is an ensemble Kalman filter data assimilation system developed for Multi-Modular Penn State Integrated Hydrologic Model ([MM-PIHM](https://github.com/PSUmodeling/MM-PIHM))
+MM-PIHM EnKF is an ensemble Kalman filter data assimilation system developed for Multi-Modular Penn State Integrated Hydrologic Model ([MM-PIHM](https://github.com/PSUmodeling/MM-PIHM))[1, 2].
 
-## Installing MM-PIHM-EnKF
+## Installing MM-PIHM EnKF
 
-To install MM-PIHM-EnKF, please specify your MM-PIHM directory in the Makefile, and then simply run `make` in your `MM-PIHM-EnKF` directory.
+To install MM-PIHM EnKF, please specify your MM-PIHM directory in the Makefile, and then run `make` in your `MM-PIHM-EnKF` directory.
 The Makefile will first perform a compatibility test to check if the MM-PIHM version installed is compatible.
+
+## Running MM-PIHM EnKF
+
+To run MM-PIHM EnKF, simply run the `run_cycles.sh` script.
+You can also create a PBS script that runs the `run_cycles.sh` script.
 
 ## Input files
 
 ### enkf.config
 
 `enkf.config` is the main control file for the MM-PIHM EnKF system.
-It consists of three blocks.
+It consists of four blocks.
 
 The "File paths" blocks defines the paths to other input files.
 
@@ -38,6 +43,8 @@ The "MM-PIHM configuration" block defines parameters for MM-PIHM.
 
   `OUTPUT_DIR` parameter can be left blank, in which case PROJECT.(simulation start time) style directory name will be used.
   EnKF output files (e.g., estimated parameters, assimilated observations) will also be written in this directory.
+
+The "System configuration" block defines parameters specific to your cluster.
 * `RUN_MODE`: ensemble simulation mode.
 
   If `RUN_MODE` is 0, ensemble simulations will be performed on current node sequentially without submitting jobs.
@@ -45,6 +52,13 @@ The "MM-PIHM configuration" block defines parameters for MM-PIHM.
 
   If `RUN_MODE` is 1, ensemble simulations will be submitted as PBS jobs.
   This is desirable if you have your own PBS queue so wait time is minimum.
+* `OMP_THREADS`: number of threads to be used for OpenMP.
+
+  C source files for both EnKF and MM-PIHM are optimized using OpenMP.
+  Please set set the `OMP_THREADS` to an optimal number to accelerate MM-PIHM EnKF on your machine.
+* `QUEUE`: name of your PBS queue. This parameter is only used when `RUN_MODE` is set to 1.
+  
+  The default `OMP_THREADS` and `QUEUE` provided in the `enkf.config` file are intended to be used on Penn State ICS-ACI systems for open queues.
 
 ### param.tbl
 
@@ -104,8 +118,6 @@ This script is invoked by Makefile to check whether the installed MM-PIHM versio
 ### util/run_ens.sh
 
 This script is used to perform ensemble simulations of MM-PIHM.
-The parameters are intended to be used on Penn State ICS-ACI systems.
-You can change the number of OMP threads or PBS queue name if you use different systems.
 
 ### util/write_para.sh
 
@@ -125,4 +137,8 @@ This code uses the the inverse cumulative normal distribution code developed by 
 
 ## REFERENCES
 
-[3] Packer, J. S., et al., 2015: CLAMMS: A scalable algorithm for calling common and rare copy number variants from exome sequencing data. *Bioinformatics*, **32**,133--135.
+[1] Shi, Y., K. J. Davis, F. Zhang, C. J. Duffy, and X. Yu, 2014: Parameter estimation of a physically-based land surface hydrologic model using the ensemble Kalman Filter: A synthetic experiment. *Water Resources Research*, **50**, 706--724.
+
+[2] Shi, Y., K. J. Davis, F. Zhang and C. J. Duffy, and X. Yu, 2015: Parameter estimation of a physically-based land surface hydrologic model using an ensemble Kalman filter: A multivariate real-data experiment. *Advances in Water Resources*, **83**, 421--427.
+
+[3] Packer, J. S., and Coauthors, 2015: CLAMMS: A scalable algorithm for calling common and rare copy number variants from exome sequencing data. *Bioinformatics*, **32**,133--135.

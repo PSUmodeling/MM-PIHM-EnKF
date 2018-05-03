@@ -44,6 +44,8 @@ export PERTURB_MODE
 export NUM_MEMBER
 export INFLT_WEIGHT
 
+export OMP_NUM_THREADS=$OMP_THREADS
+
 # Save current work directory
 WORK_DIR=$PWD
 

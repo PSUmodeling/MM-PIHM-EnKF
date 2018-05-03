@@ -1,8 +1,5 @@
 #!/bin/sh
 
-OMP_THREADS=20
-QUEUE=open
-
 first_cycle=$1
 
 if [ $first_cycle == 1 ]; then
@@ -16,7 +13,6 @@ if [ $RUN_MODE -eq 0 ]; then
     for (( ind=1; ind<=$NUM_MEMBER; ind++ ))
     do
         simulation=$( printf '%s.%03d' $PROJECT $ind )
-        export OMP_NUM_THREADS=$OMP_THREADS
         cd $PIHM_DIR
         echo "    Running ensemble member $ind"
         ./flux-pihm $param $simulation

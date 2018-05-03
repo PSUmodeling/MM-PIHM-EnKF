@@ -59,3 +59,4 @@ util/assim
 /scripts/
 !run_cycles.sh
 *.sh
+*.pbs*

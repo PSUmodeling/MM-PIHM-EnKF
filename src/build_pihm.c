@@ -35,7 +35,7 @@ void BuildPIHM(const char *pihm_dir, const char *project, pihm_struct pihm)
     ReadCalib(pihm->filename.calib, &pihm->cal);
 
     /* Read LSM input file */
-    ReadLsm(pihm->filename.lsm, &pihm->siteinfo, &pihm->ctrl, &pihm->noahtbl);
+    ReadLsm(pihm->filename.lsm, &pihm->siteinfo, &pihm->noahtbl, &pihm->ctrl);
 
     /*
      * Initialize PIHM structures
@@ -51,14 +51,14 @@ void BuildPIHM(const char *pihm_dir, const char *project, pihm_struct pihm)
         pihm->elem[i].attrib.soil_type = pihm->atttbl.soil[i];
     }
 
-    InitMesh(pihm->elem, &pihm->meshtbl);
+    InitMesh(&pihm->meshtbl, pihm->elem);
 
-    InitTopo(pihm->elem, &pihm->meshtbl);
+    InitTopo(&pihm->meshtbl, pihm->elem);
 
-    InitSoil(pihm->elem, &pihm->soiltbl, &pihm->noahtbl, &pihm->cal);
+    InitSoil(&pihm->soiltbl, &pihm->noahtbl, &pihm->cal, pihm->elem);
 
-    InitRiver(pihm->river, pihm->elem, &pihm->rivtbl, &pihm->shptbl,
-        &pihm->matltbl, &pihm->meshtbl, &pihm->cal);
+    InitRiver(&pihm->rivtbl, &pihm->shptbl, &pihm->matltbl, &pihm->meshtbl,
+        &pihm->cal, pihm->elem, pihm->river);
 
-    InitLsm(pihm->elem, &pihm->ctrl, &pihm->noahtbl, &pihm->cal);
+    InitLsm(&pihm->noahtbl, &pihm->cal, &pihm->ctrl, pihm->elem);
 }

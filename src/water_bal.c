@@ -80,7 +80,7 @@ void WaterBal(const paramtbl_struct *paramtbl, const vartbl_struct *vartbl,
             elem[i].ps.nwtbl = FindWaterTable(elem[i].ps.sldpth,
                 elem[i].ps.nsoil, elem[i].ws.gw, elem[i].ps.satdpth);
 
-            AdjSmProf(&soil, &elem[i].ps, sice, 0.0, &elem[i].wf, &elem[i].ws);
+            AdjSmProf(0.0, sice, &soil, &elem[i].ps, &elem[i].ws, &elem[i].wf);
 
             ens->member[n].var[FindVar("unsat", vartbl)][i] = elem[i].ws.unsat;
             ens->member[n].var[FindVar("gw", vartbl)][i] = elem[i].ws.gw;

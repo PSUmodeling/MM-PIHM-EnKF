@@ -59,33 +59,33 @@ void            WriteVarOutput(const char *, const char *, const char *,
     const vartbl_struct *, int, const ens_struct *);
 
 /* MM-PIHM functions */
-void            AdjSmProf(const soil_struct *, const pstate_struct *,
-    const double *, double, wflux_struct *, wstate_struct *);
-int             FindWaterTable(const double *, int, double, double *);
+void            AdjSmProf(double, const double [], const soil_struct *,
+    const pstate_struct *, wstate_struct *, wflux_struct *);
+int             FindWaterTable(const double [], int, double, double []);
 void            FreeAtttbl(atttbl_struct *);
 void            FreeMatltbl(matltbl_struct *);
 void            FreeMeshtbl(meshtbl_struct *);
 void            FreeRivtbl(rivtbl_struct *);
 void            FreeShptbl(shptbl_struct *);
 void            FreeSoiltbl(soiltbl_struct *);
-void            InitLsm(elem_struct *, const ctrl_struct *,
-    const noahtbl_struct *, const calib_struct *);
-void            InitMesh(elem_struct *, const meshtbl_struct *);
-void            InitRiver(river_struct *, elem_struct *, const rivtbl_struct *,
-    const shptbl_struct *, const matltbl_struct *, const meshtbl_struct *,
-    const calib_struct *);
-void            InitSoil(elem_struct *, const soiltbl_struct *,
-    const noahtbl_struct *, const calib_struct *);
-void            InitTopo(elem_struct *, const meshtbl_struct *);
+void            InitLsm(const noahtbl_struct *, const calib_struct *,
+    const ctrl_struct *, elem_struct []);
+void            InitMesh(const meshtbl_struct *, elem_struct []);
+void            InitRiver(const rivtbl_struct *, const shptbl_struct *,
+    const matltbl_struct *, const meshtbl_struct *, const calib_struct *,
+    elem_struct [], river_struct []);
+void            InitSoil(const soiltbl_struct *, const noahtbl_struct *,
+    const calib_struct *, elem_struct []);
+void            InitTopo(const meshtbl_struct *, elem_struct []);
 pihm_t_struct   PIHMTime(int);
-void            ReadAtt(const char *, atttbl_struct *);
-void            ReadCalib(const char *, calib_struct *);
-void            ReadLsm(const char *, siteinfo_struct *, ctrl_struct *,
-    noahtbl_struct *);
-void            ReadMesh(const char *, meshtbl_struct *);
-void            ReadRiver(const char *, rivtbl_struct *, shptbl_struct *,
+void            ReadAtt(const char [], atttbl_struct *);
+void            ReadCalib(const char [], calib_struct *);
+void            ReadLsm(const char [], siteinfo_struct *, noahtbl_struct *,
+    ctrl_struct *);
+void            ReadMesh(const char [], meshtbl_struct *);
+void            ReadRiver(const char [], rivtbl_struct *, shptbl_struct *,
     matltbl_struct *, forc_struct *);
-void            ReadSoil(const char *, soiltbl_struct *);
+void            ReadSoil(const char [], soiltbl_struct *);
 int             StrTime(const char *);
 
 #endif

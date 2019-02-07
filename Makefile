@@ -7,7 +7,8 @@ VERS = 0.1.0-alpha
 PIHM_DIR = $$HOME/work/MM-PIHM
 
 # Required MM-PIHM version
-RQD_PIHM_VERS = 0.9.0-alpha
+LOW_PIHM_VERS = 0.9.0-alpha
+HIGH_PIHM_VERS = 0.10.0-alpha
 
 CC = gcc
 CFLAGS = -g -O2
@@ -109,7 +110,7 @@ all: check_version pihmlib enkflib perturb assim
 	@chmod 755 ./util/*.sh
 
 check_version:
-	@util/check_version.sh $(PIHM_DIR) $(RQD_PIHM_VERS) $(VERS)
+	@util/check_version.sh $(PIHM_DIR) $(LOW_PIHM_VERS) $(HIGH_PIHM_VERS) $(VERS)
 
 pihmlib:
 	@mkdir -p lib

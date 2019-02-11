@@ -7,8 +7,8 @@ VERS = 0.1.0-alpha
 PIHM_DIR = $$HOME/work/MM-PIHM
 
 # Required MM-PIHM version
-LOW_PIHM_VERS = 0.9.0-alpha
-HIGH_PIHM_VERS = 0.10.0-alpha
+LOW_PIHM_VERS = 0.10.1-alpha
+HIGH_PIHM_VERS = above
 
 CC = gcc
 CFLAGS = -g -O2

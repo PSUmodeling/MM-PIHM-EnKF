@@ -1,10 +1,13 @@
 # MM-PIHM-EnKF
 MM-PIHM EnKF is an ensemble Kalman filter data assimilation system developed for Multi-Modular Penn State Integrated Hydrologic Model ([MM-PIHM](https://github.com/PSUmodeling/MM-PIHM))[1, 2].
+The current version of MM-PIHM EnKF system only works with Flux-PIHM.
+Support to more MM-PIHM models will be added in the future.
 
 ## Installing MM-PIHM EnKF
 
 To install MM-PIHM EnKF, please specify your MM-PIHM directory in the Makefile, and then run `make` in your `MM-PIHM-EnKF` directory.
 The Makefile will first perform a compatibility test to check if the MM-PIHM version installed is compatible.
+Note that Flux-PIHM must be compiled first in the specified MM-PIHM directory.
 
 ## Running MM-PIHM EnKF
 
@@ -57,7 +60,7 @@ The "System configuration" block defines parameters specific to your cluster.
   C source files for both EnKF and MM-PIHM are optimized using OpenMP.
   Please set set the `OMP_THREADS` to an optimal number to accelerate MM-PIHM EnKF on your machine.
 * `QUEUE`: name of your PBS queue. This parameter is only used when `RUN_MODE` is set to 1.
-  
+
   The default `OMP_THREADS` and `QUEUE` provided in the `enkf.config` file are intended to be used on Penn State ICS-ACI systems for open queues.
 
 ### param.tbl

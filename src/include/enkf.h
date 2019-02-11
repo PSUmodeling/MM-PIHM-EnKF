@@ -12,7 +12,7 @@
 # include <omp.h>
 #endif
 
-#define VERSION    "0.1.0-alpha"
+#define VERSION    "0.1.1-alpha"
 
 #include "custom_io.h"
 

@@ -3,7 +3,7 @@
 PIHM_DIR=$1
 LOW_VERSION=$2
 HIGH_VERSION=$3
-ENKF_VERSION=$4
+ENKF_VERSION=$(sed -e 's/^"//' -e 's/"$//' <<< $(grep "VERSION" ./src/include/enkf.h |awk '{print $3}'))
 
 # Check if PIHM_DIR exists
 if [ ! -d $PIHM_DIR ]; then

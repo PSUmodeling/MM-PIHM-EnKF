@@ -1,7 +1,4 @@
-# Makefile for MM-PIHM EnKF v0.1.0-alpha
-
-# Current MM-PIHM EnKF version
-VERS = 0.1.0-alpha
+# Makefile for MM-PIHM EnKF
 
 # Please specify your MM-PIHM directory
 PIHM_DIR = $$HOME/work/MM-PIHM
@@ -110,7 +107,7 @@ all: check_version pihmlib enkflib perturb assim
 	@chmod 755 ./util/*.sh
 
 check_version:
-	@util/check_version.sh $(PIHM_DIR) $(LOW_PIHM_VERS) $(HIGH_PIHM_VERS) $(VERS)
+	@util/check_version.sh $(PIHM_DIR) $(LOW_PIHM_VERS) $(HIGH_PIHM_VERS)
 
 pihmlib:
 	@mkdir -p lib

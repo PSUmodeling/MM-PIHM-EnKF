@@ -89,6 +89,20 @@ void WriteCalFile(const char *pihm_dir, const char *project,
             "REFSMC",
             "WLTSMC"
     };
+    const int       NUM_BGC_PARAM = 2;
+    static char     BGC_PARAM[][MAXSTRING] = {
+            "MORTALITY",
+            "SLA"
+    };
+    const int       NUM_RT_PARAM = 6;
+    static char     RT_PARAM[][MAXSTRING] = {
+            "RATE",
+            "SSA",
+            "GWINFLUX",
+            "PRCPCONC",
+            "INITCONC",
+            "XSORPTION"
+    };
     const int       NUM_SCEN_PARAM = 2;
     static char     SCEN_PARAM[][MAXSTRING] = {
             "PRCP",
@@ -139,6 +153,38 @@ void WriteCalFile(const char *pihm_dir, const char *project,
             {
                 fprintf(fp, "%-16s%-.3lf\n",
                     LSM_PARAM[j], ens->member[i].param[ind]);
+            }
+        }
+
+        fprintf(fp, "%-s", "\nBGC_CALIBRATION\n");
+        for (j = 0; j < NUM_BGC_PARAM; j++)
+        {
+            ind = FindParam(BGC_PARAM[j], paramtbl);
+            if (ind < 0)
+            {
+                printf("Error: parameter %s is listed in parameter table.\n",
+                    BGC_PARAM[j]);
+            }
+            else
+            {
+                fprintf(fp, "%-16s%-.3lf\n",
+                    BGC_PARAM[j], ens->member[i].param[ind]);
+            }
+        }
+
+        fprintf(fp, "%-s", "\nRT_CALIBRATION\n");
+        for (j = 0; j < NUM_RT_PARAM; j++)
+        {
+            ind = FindParam(RT_PARAM[j], paramtbl);
+            if (ind < 0)
+            {
+                printf("Error: parameter %s is listed in parameter table.\n",
+                    RT_PARAM[j]);
+            }
+            else
+            {
+                fprintf(fp, "%-16s%-.3lf\n",
+                    RT_PARAM[j], ens->member[i].param[ind]);
             }
         }
 

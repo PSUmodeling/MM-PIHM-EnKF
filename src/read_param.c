@@ -46,6 +46,8 @@ void ReadParam(const char *filename, const paramtbl_struct *paramtbl,
         sscanf(cmdstr, "%s", optstr);
 
         if (strcasecmp(optstr, "LSM_CALIBRATION") == 0 ||
+            strcasecmp(optstr, "BGC_CALIBRATION") == 0 ||
+            strcasecmp(optstr, "RT_CALIBRATION") == 0 ||
             strcasecmp(optstr, "SCENARIO") == 0)
         {
             continue;
